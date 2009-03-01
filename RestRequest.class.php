@@ -120,6 +120,17 @@ class RestRequest {
         return $this->URIParts[$i];
     }
 
+    public function getURI($i=null) {
+        if($i !== null) return $this->getURIpart($i);
+        return $this->requestURI ;
+    }
+
+    public function setURI($url) {
+		$this->requestURI = $url;
+        $this->URIParts = explode("/",$this->requestURI);
+        return $this ;
+    }
+
     public function getExtension() {
        preg_match('@\.([a-zA-Z0-9]{1,5})$@',$this->rest->getQuery(),$reg);
        return $reg[1];
