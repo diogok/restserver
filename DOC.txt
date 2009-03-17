@@ -54,6 +54,15 @@ class Anyview implements RestView {
     }
 }
 
+It also adds a convinience GenericView class, for basic templating on php scripts, as follow:
+
+class Homepage implements RestController {
+    function execute(RestServer $rest) {
+        // Logic in here
+        return new GenericView("path_to_php_script");
+    }
+}
+
 For recovering information about the request taken, the RestServer provides the RestRequest object. You can get it by calling the getRequest() method on the RestServer. There are a few methods available on the RestRequest:
 
 isGet() // If the request is a GET

@@ -1,4 +1,8 @@
 <?
+
+/** Class RestRequest
+  * Holds the Request in a RestServer
+  */
 class RestRequest {
 
     private $rest ;
@@ -15,17 +19,27 @@ class RestRequest {
 	private $post ;
     private $files ;
 	
-    public function __construct($rest=null) {
+    /**
+      * Constructor of RestRequest
+      * @param RestServer $rest = null, Parent RestServer
+      */
+    public function __construct(RestServer $rest=null) {
 
+        // Sets most of the parameters
         $this->rest = $rest ;
             
 		$this->requestMethod = $_SERVER["REQUEST_METHOD"];
 		$this->requestURI = $_SERVER["REQUEST_URI"];
         $this->URIParts = explode("/",$this->requestURI);
                 
-        $this->authData = $_SERVER['PHP_AUTH_DIGEST'] ;                
-        $this->user = $_SERVER["PHP_AUTH_USER"];
-        $this->pwd = $_SERVER["PHP_AUTH_PW"];
+        if(isset($_SERVER['PHP_AUTH_DIGEST']))
+            $this->authData = $_SERVER['PHP_AUTH_DIGEST'] ;                
+
+        if(isset($_SERVER['PHP_AUTH_USER'])) 
+            $this->user = $_SERVER["PHP_AUTH_USER"];
+
+        if(isset($_SERVER['PHP_AUTH_PW'])) 
+            $this->pwd = $_SERVER["PHP_AUTH_PW"];
 		
 		$this->get = $_GET ;
 		$this->post = $_POST ;
@@ -33,6 +47,10 @@ class RestRequest {
 		
     }
  
+    /**
+      * Returns if Request is GET
+      * @return boolean
+      */
     public function isGet() {
         if($this->requestMethod == "GET") {
             return true ;
@@ -40,6 +58,10 @@ class RestRequest {
         return false;
     }
 
+    /** 
+      * Returns if Request is POST
+      * @return boolean
+      */
     public function isPost() {
        if($this->requestMethod == "POST") {
            return true ;
@@ -47,6 +69,10 @@ class RestRequest {
        return false;
     }
 
+    /**
+      * Return if Request is PUT
+      * @return boolean
+      */
     public function isPut() {
        if($this->requestMethod == "PUT") {
            return true ;
@@ -54,6 +80,10 @@ class RestRequest {
        return false;
     }
 
+    /**
+      * Return true if Request is DELETE
+      * @return boolean
+      */
     public function isDelete() {
        if($this->requestMethod == "DELETE") {
            return true ;
@@ -61,11 +91,20 @@ class RestRequest {
        return false;
     }
 	
+
+    /** 
+      * Get parameters sent with GET (url parameters)
+      * @return array
+      */
     public function getGet($k=null) {
         if($k==null) return $this->get ;
         else return $this->get[$k] ;
     }
 
+    /**
+      * Return parameters sent on a POST
+      * @return array
+      */
     public function getPost($k=null) {
         if($k==null) return $this->post ;
         else return $this->post[$k] ;
@@ -76,6 +115,11 @@ class RestRequest {
         else return $this->files[$k];
     }
 
+    /**
+      * Return content sent with PUT
+      * @param $key=null
+      * @return mixed 
+      */
     public function getPut($k=null) {
        $_PUT  = array();
        if($_SERVER['REQUEST_METHOD'] == 'PUT') {
@@ -92,57 +136,109 @@ class RestRequest {
       else return $_PUT[$k];
     }
 
+    /**
+      * Get authentication data on DIGEST
+      * @return mixed
+      */
    public function getAuthData() {
       return $this->authData;
    }
    
+   /**
+     * Return user sent on BASIC Authentication
+     * @return string
+     */
    public function getUser() {
        return $this->user;
    }
         
+   /**
+     * Return password sent on Basic Authentication
+     * @return string
+     */
    public function getPassword() {
        return $this->pwd ;
    }
     
+   /**
+     * Return Request Method(PUT, DELETE, OPTION, GET...)
+     * return string
+     */
    public function getMethod() {
       return $this->requestMethod ;
    }
         
+   /**
+     * Set request method
+     * @param string $method
+     * @return  RestRequest
+     */
    public function setMethod($m) {
        $this->requestMethod = $m ;
+       return $this;
    }
 	
-    public function getRequestURI() {
-        return $this->requestURI ;
-    }
+   /**
+     * Return the URI requested
+     * @return string
+     */
+   public function getRequestURI() {
+       return $this->requestURI ;
+   }
 
-    public function getURIpart($i) {
-        return $this->URIParts[$i];
-    }
+   /**
+     * Return part of the URL
+     * return string
+     */
+   public function getURIpart($i) {
+       if(isset($this->URIParts[$i]))
+            return $this->URIParts[$i];
+        else
+            return null;
+   }
 
-    public function getURI($i=null) {
+   /**
+     * Return the URI or part of it
+     * @param $part=null, count of the part
+     * @return string
+     */
+   public function getURI($i=null) {
         if($i !== null) return $this->getURIpart($i);
-        return $this->requestURI ;
-    }
+        return $this->getRequestURI() ;
+   }
 
-    public function setURI($url) {
+   /**
+     * Sets the URI to deal
+     * @param string $uri
+     * @return RestRequest $url
+     */
+   public function setURI($url) {
 		$this->requestURI = $url;
         $this->URIParts = explode("/",$this->requestURI);
         return $this ;
-    }
+   }
 
-    public function getExtension() {
+   /**
+     * Return the extension of the URI (if any)
+     * @return string
+     */
+   public function getExtension() {
        preg_match('@\.([a-zA-Z0-9]{1,5})$@',$this->rest->getQuery(),$reg);
        return $reg[1];
-    }
+   }
 	
-	public function acceptMime($mime) {
+   /**
+     * Return true if given mime is accepted
+     * @param string $mime to check
+     * @return boolean
+     */
+   public function acceptMime($mime) {
         if(strpos($_SERVER["HTTP_ACCEPT"],$mime) > 0) {
             return true ;
         } else {
             return false ;
         }
-	}
-	
+   }
+
 }
 ?>

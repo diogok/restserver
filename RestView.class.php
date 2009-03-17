@@ -1,5 +1,9 @@
 <?php
 
+/**
+  * Class RestView
+  * Interface describe a View for rendering an Response
+  */
 interface RestView extends RestAction {
     /**
        * Render this view

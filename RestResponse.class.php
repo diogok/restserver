@@ -1,4 +1,7 @@
 <?
+/**
+  * RestResponse hold the response in a RestServer
+  */
 class RestResponse {
 
     private $rest ; 
