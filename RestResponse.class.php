@@ -1,4 +1,4 @@
-<?
+<?php
 /**
   * RestResponse hold the response in a RestServer
   */

@@ -36,7 +36,8 @@ class RestServer {
         $this->request = new RestRequest($this); // Request handler
         $this->response = new RestResponse($this); // Response holder
             
-		$this->baseUrl = "http://".$_SERVER["HTTP_HOST"].dirname($_SERVER["SCRIPT_NAME"]);
+        if(isset($_SERVER["HTTP_HOST"]))
+            $this->baseUrl = "http://".$_SERVER["HTTP_HOST"].dirname($_SERVER["SCRIPT_NAME"]);
 				
         // If will use custom URI or HTTP requested URI
         if($query===null) $this->query = $this->getRequest()->getRequestURI() ;

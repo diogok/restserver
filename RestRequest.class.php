@@ -1,4 +1,4 @@
-<?
+<?php
 
 /** Class RestRequest
   * Holds the Request in a RestServer
@@ -28,8 +28,10 @@ class RestRequest {
         // Sets most of the parameters
         $this->rest = $rest ;
             
-		$this->requestMethod = $_SERVER["REQUEST_METHOD"];
-		$this->requestURI = $_SERVER["REQUEST_URI"];
+        if(isset($_SERVER["REQUEST_METHOD"]))
+            $this->requestMethod = $_SERVER["REQUEST_METHOD"];
+        if(isset($_SERVER["REQUEST_URI"]))
+            $this->requestURI = $_SERVER["REQUEST_URI"];
         $this->URIParts = explode("/",$this->requestURI);
                 
         if(isset($_SERVER['PHP_AUTH_DIGEST']))
@@ -223,8 +225,12 @@ class RestRequest {
      * @return string
      */
    public function getExtension() {
+       $reg = array();
        preg_match('@\.([a-zA-Z0-9]{1,5})$@',$this->rest->getQuery(),$reg);
-       return $reg[1];
+       if(isset($reg[1]))
+           return $reg[1];
+       else
+           return false;
    }
 	
    /**
