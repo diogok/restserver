@@ -1,18 +1,13 @@
-<?
+<?php
 
 // These are the package classes, should be dealt in autoload
 include '../RestServer.class.php';
-include '../RestAction.class.php';
-include '../RestView.class.php';
-include '../RestController.class.php';
 include '../GenericView.class.php';
-include '../RestRequest.class.php';
-include '../RestResponse.class.php';
 
 // These are the Example classes, autoLoad it
 include 'HomeController.class.php';
 include 'UserController.class.php';
-include 'UserProfile.class.php';
+include 'UserProfileView.class.php';
 
 /** Sample aplication showing how to route with RestServer */
 
@@ -30,7 +25,7 @@ $rest = new RestServer($_GET["q"]);// Using a parameter as we won't have url rew
 $rest->addMap("GET","/?","HomeController");
 $rest->addMap("GET","/user","UserController");
 $rest->addMap("POST","/user","UserController::insert"); // A specific method
-$rest->addMap("GET","/user/[a-zA-Z0-9]+","UserProfile");
+$rest->addMap("GET","/user/[a-zA-Z0-9]+","UserProfileView");
 
 echo $rest->execute();
 

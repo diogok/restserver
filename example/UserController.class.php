@@ -1,4 +1,4 @@
-<?
+<?php
 class UserController implements RestController {
     function execute(RestServer $rest) {
        return new GenericView("userForm.php") ;
