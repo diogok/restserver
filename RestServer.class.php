@@ -161,13 +161,22 @@ class RestServer {
         return false ;
 	}
 	
+    /** 
+      * Unauthorize the request
+      * $return RestServer
+      */
+    public function unAuth() {
+        $this->getResponse()->cleanHeader();
+        $this->getResponse()->addHeader("HTTP/1.1 401 Unauthorized");
+        $this->getResponse()->addHeader('WWW-Authenticate: Basic realm="Restful"');
+        $this->getResponse()->setResponse("Unauthorized");                  
+        return $this ;
+    }
+
     private function testAuth() {
         if($this->requireAuth === false) return true;
         if(!$this->auth) { 
-            $this->getResponse()->cleanHeader();
-            $this->getResponse()->addHeader("HTTP/1.1 401 Unauthorized");
-            $this->getResponse()->addHeader('WWW-Authenticate: Basic realm="Restful"');
-            $this->getResponse()->setResponse("Unauthorized");                  
+            $this->unAuth();
             return false ;
         }
         return true ;
@@ -227,7 +236,7 @@ class RestServer {
             $class = $class->$method($this);
         }
 
-        if($class instanceof RestAction) return $this->call($class); // May have another class to folow the request
+        if($class instanceof RestAction) return $this->call($class); // May have another class to follow the request
             
         return $this ;
     }
