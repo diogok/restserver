@@ -7,7 +7,7 @@ class HomeView implements RestView {
         $user = $rest->getParameter("user");
         // We could use any templating system
         // As we don't have any, can use the generic view
-        $view = new GenericView("templates/home.php",array($user));
+        $view = new GenericView("home.php",array($user));
         // We set what the response will be
         $rest->getReponse()->setResponse($view);
         // Return rest

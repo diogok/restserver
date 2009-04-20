@@ -22,6 +22,7 @@
 <UML:DataType stereotype="5" visibility="public" xmi.id="37" name="boolean"/>
 <UML:DataType stereotype="5" visibility="public" xmi.id="43" name="string;"/>
 <UML:DataType stereotype="5" visibility="public" xmi.id="76" name="array"/>
+<UML:DataType stereotype="5" visibility="public" xmi.id="111" name="bool"/>
 <UML:Class visibility="public" xmi.id="8" name="RestServer">
 <UML:Classifier.feature>
 <UML:Attribute visibility="private" xmi.id="10" value="" type="mixed" name="auth"/>
@@ -231,19 +232,19 @@
 <UML:Attribute visibility="private" xmi.id="103" value="" type="mixed" name="response"/>
 <UML:Operation visibility="public" xmi.id="104" type="void" name="__contruct">
 <UML:BehavioralFeature.parameter>
-<UML:Parameter visibility="public" xmi.id="105" value="" type="mixed" name="rest"/>
+<UML:Parameter visibility="public" xmi.id="105" value="" type="RestServer" name="rest"/>
 </UML:BehavioralFeature.parameter>
 </UML:Operation>
-<UML:Operation visibility="public" xmi.id="106" type="void" name="cleanResponse">
+<UML:Operation visibility="public" xmi.id="106" type="RestResponse" name="cleanResponse">
 <UML:BehavioralFeature.parameter>
 </UML:BehavioralFeature.parameter>
 </UML:Operation>
-<UML:Operation visibility="public" xmi.id="107" type="void" name="addHeader">
+<UML:Operation visibility="public" xmi.id="107" type="RestResponse" name="addHeader">
 <UML:BehavioralFeature.parameter>
-<UML:Parameter visibility="public" xmi.id="108" value="" type="mixed" name="header"/>
+<UML:Parameter visibility="public" xmi.id="108" value="" type="string" name="header"/>
 </UML:BehavioralFeature.parameter>
 </UML:Operation>
-<UML:Operation visibility="public" xmi.id="109" type="void" name="cleanHeader">
+<UML:Operation visibility="public" xmi.id="109" type="RestResponse" name="cleanHeader">
 <UML:BehavioralFeature.parameter>
 </UML:BehavioralFeature.parameter>
 </UML:Operation>
@@ -251,50 +252,50 @@
 <UML:BehavioralFeature.parameter>
 </UML:BehavioralFeature.parameter>
 </UML:Operation>
-<UML:Operation visibility="public" xmi.id="111" type="void" name="headerSent">
+<UML:Operation visibility="public" xmi.id="112" type="bool" name="headerSent">
 <UML:BehavioralFeature.parameter>
 </UML:BehavioralFeature.parameter>
 </UML:Operation>
-<UML:Operation visibility="public" xmi.id="112" type="void" name="setResponse">
+<UML:Operation visibility="public" xmi.id="113" type="RestResponse" name="setResponse">
 <UML:BehavioralFeature.parameter>
-<UML:Parameter visibility="public" xmi.id="113" value="" type="mixed" name="response"/>
+<UML:Parameter visibility="public" xmi.id="114" value="" type="mixed" name="response"/>
 </UML:BehavioralFeature.parameter>
 </UML:Operation>
-<UML:Operation visibility="public" xmi.id="114" type="void" name="addResponse">
+<UML:Operation visibility="public" xmi.id="115" type="RestResponse" name="addResponse">
 <UML:BehavioralFeature.parameter>
-<UML:Parameter visibility="public" xmi.id="115" value="" type="mixed" name="response"/>
+<UML:Parameter visibility="public" xmi.id="116" value="" type="string" name="response"/>
 </UML:BehavioralFeature.parameter>
 </UML:Operation>
-<UML:Operation visibility="public" xmi.id="116" type="void" name="getResponse">
+<UML:Operation visibility="public" xmi.id="117" type="mixed" name="getResponse">
 <UML:BehavioralFeature.parameter>
 </UML:BehavioralFeature.parameter>
 </UML:Operation>
 </UML:Classifier.feature>
 </UML:Class>
-<UML:Interface visibility="public" xmi.id="117" isAbstract="true" name="RestAction">
+<UML:Interface visibility="public" xmi.id="118" isAbstract="true" name="RestAction">
 <UML:Classifier.feature>
 </UML:Classifier.feature>
 </UML:Interface>
-<UML:Interface visibility="public" xmi.id="118" isAbstract="true" name="RestController">
+<UML:Interface visibility="public" xmi.id="119" isAbstract="true" name="RestController">
 <UML:Classifier.feature>
-<UML:Operation visibility="public" xmi.id="119" type="RestAction" name="execute" isAbstract="true">
+<UML:Operation visibility="public" xmi.id="120" type="RestAction" name="execute" isAbstract="true">
 <UML:BehavioralFeature.parameter>
-<UML:Parameter visibility="public" xmi.id="120" value="" type="RestServer" name="restServer"/>
+<UML:Parameter visibility="public" xmi.id="121" value="" type="RestServer" name="restServer"/>
 </UML:BehavioralFeature.parameter>
 </UML:Operation>
 </UML:Classifier.feature>
 </UML:Interface>
-<UML:Interface visibility="public" xmi.id="121" isAbstract="true" name="RestView">
+<UML:Interface visibility="public" xmi.id="122" isAbstract="true" name="RestView">
 <UML:Classifier.feature>
-<UML:Operation visibility="public" xmi.id="122" type="string" name="show" isAbstract="true">
+<UML:Operation visibility="public" xmi.id="123" type="string" name="show" isAbstract="true">
 <UML:BehavioralFeature.parameter>
-<UML:Parameter visibility="public" xmi.id="123" value="" type="RestServer" name="restServer"/>
+<UML:Parameter visibility="public" xmi.id="124" value="" type="RestServer" name="restServer"/>
 </UML:BehavioralFeature.parameter>
 </UML:Operation>
 </UML:Classifier.feature>
 </UML:Interface>
-<UML:Generalization child="118" visibility="public" xmi.id="124" parent="117" />
-<UML:Generalization child="121" visibility="public" xmi.id="125" parent="117" />
+<UML:Generalization child="119" visibility="public" xmi.id="125" parent="118" />
+<UML:Generalization child="122" visibility="public" xmi.id="126" parent="118" />
 </UML:Namespace.ownedElement>
 </UML:Model>
 </XMI.content>

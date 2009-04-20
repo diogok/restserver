@@ -27,6 +27,7 @@ class RestServer {
 	
 	private $map ;
     private $params ;
+    private $stack ;
 	
     /** Contructor of RestServer
       * @param string $query Optional query to be treat as the URL
@@ -193,6 +194,15 @@ class RestServer {
     }
 
     /**
+      * Return last class name from RestServer stack trace
+      * return string 
+      */
+    public function lastClass() {
+        $i = count($this->stack);
+        return $this->stack[$i - 1];
+    }
+
+    /**
       * Run the Server to handle the request and prepare the response
       * @return string $responseContent
       */
@@ -228,6 +238,7 @@ class RestServer {
 	}
         
     private function call($class,$method=null) {	                
+        $this->stack[] = get_class($class) ;
         if($class instanceof RestView) { // If is a view, call Show($restServer)
             if($method==null) $method="show";
             $class = $class->$method($this) ; 
@@ -236,10 +247,13 @@ class RestServer {
             $class = $class->$method($this);
         }
 
-        if($class instanceof RestAction) return $this->call($class); // May have another class to follow the request
+        if($class instanceof RestAction && get_class($class) != $this->lastClass()) {
+            return $this->call($class); // May have another class to follow the request
+        }
             
         return $this ;
     }
+
                 
 	private function show() {
         $this->testAuth() ; // Test authentication

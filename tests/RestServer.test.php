@@ -1,11 +1,6 @@
-<?
+<?php
 
     include ("../RestServer.class.php");
-    include ("../RestResponse.class.php");
-    include ("../RestRequest.class.php");
-    include ("../RestAction.class.php");
-    include ("../RestView.class.php");
-    include ("../RestController.class.php");
         
     class RC implements RestController {
         function execute(RestServer $rest) {
@@ -42,6 +37,13 @@
             return $rest ;
         }
     }
+
+    class RC3 implements RestController {
+        function execute(RestServer $rest) {
+            $rest->getResponse()->setResponse("Finish!");
+            return new RC3();
+        }
+    }
     
     $rest = new RestServer();
    
@@ -52,6 +54,7 @@
     $rest->addMap("GET","/user","view");
     $rest->addMap("GET","/rock","RC::rock");
     $rest->addMap("GET","/user/([a-zA-Z0-9]*).?[a-zA-Z]{0,5}","view2");
+    $rest->addMap("GET","/error","RC3");
     
     $q = "/user.html";    
     $rest->setQuery($q);    
@@ -125,6 +128,16 @@
         return ;
     }
     
+    $q = "/error";
+    $rest->setQuery($q);  
+    $rest->getRequest()->setMethod("GET");
+    $response = $rest->execute() ;
+    if($response != "Finish!") {
+        echo "Failed at 135";
+        return ;
+    }
+
+echo "PASSED\n";
 if(!function_exists("xdebug_time_index")) return ;
 
 echo "It took ".round(xdebug_time_index(),5)." seconds \n";
