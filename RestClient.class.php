@@ -3,6 +3,7 @@
 class RestClient {
 
      private $curl ;
+     private $url ;
      private $response ;
 
      private $method="GET";
@@ -32,6 +33,7 @@ class RestClient {
          if($this->contentType != null) {
              curl_setopt($this->curl,CURLOPT_HTTPHEADERS,array("Content-Type: ".$this->contentType));
          }
+         curl_setopt($this->curl,CURLOPT_URL,$this->url);
          $this->response = curl_exec($this->curl);
          return $this ;
      }
@@ -53,7 +55,7 @@ class RestClient {
      }
 
      public function setUrl($url) {
-         curl_setopt($this->curl,CURLOPT_URL,$url);
+         $this->url = $url; 
          return $this;
      }
 
