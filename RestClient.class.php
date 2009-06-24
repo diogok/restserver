@@ -4,7 +4,8 @@ class RestClient {
 
      private $curl ;
      private $url ;
-     private $response ;
+     private $response ="";
+     private $headers = array();
 
      private $method="GET";
      private $params=array();
@@ -15,6 +16,7 @@ class RestClient {
          curl_setopt($this->curl,CURLOPT_RETURNTRANSFER,true);
          curl_setopt($this->curl,CURLOPT_AUTOREFERER,true);
          curl_setopt($this->curl,CURLOPT_FOLLOWLOCATION,true);
+         curl_setopt($this->curl,CURLOPT_HEADER,true);
      }
 
      public function execute() {
@@ -34,12 +36,44 @@ class RestClient {
              curl_setopt($this->curl,CURLOPT_HTTPHEADERS,array("Content-Type: ".$this->contentType));
          }
          curl_setopt($this->curl,CURLOPT_URL,$this->url);
-         $this->response = curl_exec($this->curl);
+         $r = curl_exec($this->curl);
+         $this->treatResponse($r);
          return $this ;
+     }
+
+     public function treatResponse($r) {
+        $parts  = explode("\n\r",$r);
+        preg_match("@Content-Type: ([a-zA-Z0-9-]+/?[a-zA-Z0-9-]*)@",$parts[0],$reg);
+        $this->headers['content-type'] = $reg[1];
+        preg_match("@HTTP/1.[0-1] ([0-9]{3}) ([a-zA-Z ]+)@",$parts[0],$reg);
+        $this->headers['code'] = $reg[1];
+        $this->headers['message'] = $reg[2];
+        for($i=1;$i<count($parts);$i++) {
+            if($i > 1) {
+                $this->response .= "\n\r";
+            }
+            $this->response .= $parts[$i];
+        }
+     }
+
+     public function getHeaders() {
+        return $this->headers;
      }
 
      public function getResponse() {
          return $this->response ;
+     }
+
+     public function getResponseCode() {
+         return $this->headers['code'];
+     }
+     
+     public function getResponseMessage() {
+         return $this->headers['message'];
+     }
+
+     public function getResponseContentType() {
+         return $this->headers['content-type'];
      }
 
      public function setNoFollow() {
@@ -96,8 +130,7 @@ class RestClient {
              ->setMethod("POST")
              ->setCredentials($user,$pwd)
              ->execute()
-             ->close()
-             ->getResponse();
+             ->close();
      }
 
      public static function get($url,array $params,$user=null,$pwd=null) {
@@ -109,7 +142,7 @@ class RestClient {
          }
          $client->execute();
          $client->close();
-         return $client->getResponse() ;
+         return $client ;
      }
 
 }
