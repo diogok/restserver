@@ -1,5 +1,6 @@
 <?php
 
+include_once 'RestAction.class.php';
 /**
   * Class RestView
   * Interface describe a View for rendering an Response

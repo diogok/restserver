@@ -1,10 +1,10 @@
 <?php
             
-include 'RestAction.class.php';
-include 'RestController.class.php';
-include 'RestView.class.php';
-include 'RestRequest.class.php';
-include 'RestResponse.class.php';
+include_once 'RestAction.class.php';
+include_once 'RestController.class.php';
+include_once 'RestView.class.php';
+include_once 'RestRequest.class.php';
+include_once 'RestResponse.class.php';
 
 /**
   * Class RestServer 
@@ -16,6 +16,8 @@ class RestServer {
 	
     private $auth = true;
     private $requireAuth = false ;
+    private $relm = "RESTful";
+    private $useDigest = false;
 	
 	private $response ;
     private $request ;
@@ -161,7 +163,59 @@ class RestServer {
         }
         return false ;
 	}
+
+    /**
+      * Set if authentication should be Digest(true) or Basic(false)
+      * @param booblean $useDigest
+      * @return RestServer
+      */
+    public function useDigest($boolean=true) {
+        $this->useDigest = $boolean;
+        return $this;
+    }
+
+    /**
+      * return true if should use Digest authentication
+      * @return boolean
+      */
+    public function isDigest() {
+        return $this->useDigest;
+    }
+
+    /**
+      * Get the http Realm name
+      * @return string $realm
+      */
+    public function getRealm() {
+        return $this->realm;
+    }
+
+    /**
+      * Set the http Realm name
+      * @param string $realm
+      * @return RestServer
+      */
+    public function setRealm($realm) {
+        $this->realm = $realm ;
+        return $this;
+    }
 	
+    private function digestString() {
+        $opt = array(
+            'realm' => $this->getRealm(),
+            'domain' => '/',
+            'qop' => 'auth',
+            'algorithm' => 'MD5',
+            'nonce' => uniqid(),
+            'opaque' => md5($this->getRealm()),
+        );
+        $str = 'realm="'.$op['realm'].'",';
+        $str .= 'qop="'.$op['qop'].'",';
+        $str .= 'nonce="'.$op['nonce'].'",';
+        $str .= 'opaque="'.$op['opaque'].'"';
+        return $str;
+    }
+
     /** 
       * Unauthorize the request
       * $return RestServer
@@ -169,7 +223,11 @@ class RestServer {
     public function unAuth() {
         $this->getResponse()->cleanHeader();
         $this->getResponse()->addHeader("HTTP/1.1 401 Unauthorized");
-        $this->getResponse()->addHeader('WWW-Authenticate: Basic realm="Restful"');
+        if($this->useDigest) {
+            $rest->getResponse()->addHeader('WWW-Authenticate: Digest ' . $this->digestString());
+        } else {
+            $this->getResponse()->addHeader('WWW-Authenticate: Basic realm="'.$this->getRealm().'"');
+        }
         $this->getResponse()->setResponse("Unauthorized");                  
         return $this ;
     }
@@ -247,7 +305,8 @@ class RestServer {
             $class = $class->$method($this);
         }
 
-        if($class instanceof RestAction && get_class($class) != $this->lastClass()) {
+        if($class instanceof RestAction 
+                    && get_class($class) != $this->lastClass() ) {
             return $this->call($class); // May have another class to follow the request
         }
             

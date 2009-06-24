@@ -1,5 +1,6 @@
 <?php
 
+include_once 'RestAction.class.php';
 /** Class RestController
   * Describe a possible Controller to handle a Request
   */

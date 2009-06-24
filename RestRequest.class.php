@@ -42,13 +42,73 @@ class RestRequest {
 
         if(isset($_SERVER['PHP_AUTH_PW'])) 
             $this->pwd = $_SERVER["PHP_AUTH_PW"];
-		
+
+        if(isset($_SERVER["HTTP_AUTHORIZATION"])) {
+            $base = base64_decode(substr($_SERVER["HTTP_AUTHORIZATION"],6));
+            $arr = explode(":",$base);
+            $this->user = $arr[0];
+            $this->pwd = $arr[1];
+        }
+
+	    $authData = $this->authData ;
+	    if (!empty($authData) && ($data = $this->digestParse($authData)) && $data['username']) {
+            $this->user = $data['username'] ;
+            $this->password = $data['response'] ;
+        }
+
 		$this->get = $_GET ;
 		$this->post = $_POST ;
         $this->files = $_FILES ;
 		
     }
  
+    /**
+      * Test authentication against password for given username in Digest authencitation
+      * @param string $user
+      * @param string $password
+      * @return RestRequest 
+      */
+    public function validAuth($user,$password) {
+        $bkp = $password;
+        if($this->rest->isDigest()) {
+            $authData = $this->authData ;
+            if (!empty($authData) && ($data = $this->digestParse($authData)) && $data['username']) {
+                $A1 = md5($this->getUser() . ':' . $this->getRest()->getRealm() . ':' . $password);
+                $A2 = md5($_SERVER['REQUEST_METHOD'].':'.$_SERVER['REQUEST_URI']);
+                $password = md5($A1.':'.$data['nonce'].':'.$data['nc'].':'.$data['cnonce'].':'.$data['qop'].':'.$A2);
+            }
+        }
+        if($this->getUser() === $user && $this->getPassword() === $password) {
+            $this->getRest()->setAuth(true);
+            $this->password = $password ;
+            $this->password = $pwd ;
+        }
+        return $this->getRest();
+    }
+
+    /**
+      * Return  RestServer used;
+      * @return RestServer
+      */
+    public function getRest() {
+        return $this->rest;
+    }
+    private function digestParse($txt) {
+        // protect against missing data
+        $needed_parts = array('nonce'=>1, 'nc'=>1, 'cnonce'=>1, 'qop'=>1, 'username'=>1, 'uri'=>1, 'response'=>1);
+        $data = array();
+        // fix elements with missing "
+        $txt = preg_replace('@=([^\'"])([^\s,]+)@', '="\1\2"', $txt);
+        preg_match_all('@(\w+)=(?:([\'"])([^\2]+)\2|([^\s,]+))@U', $txt, $matches, PREG_SET_ORDER);
+
+        foreach ($matches as $m) {
+            $data[$m[1]] = trim($m[3] ? $m[3] : $m[4]);
+            unset($needed_parts[$m[1]]);
+        }
+
+        return $needed_parts ? false : $data;
+    }
+
     /**
       * Returns if Request is GET
       * @return boolean
