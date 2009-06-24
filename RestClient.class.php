@@ -8,7 +8,7 @@ class RestClient {
      private $headers = array();
 
      private $method="GET";
-     private $params=array();
+     private $params=null;
      private $contentType = null;
 
      private function __construct() {
@@ -22,10 +22,14 @@ class RestClient {
      public function execute() {
          if($this->method === "POST") {
              curl_setopt($this->curl,CURLOPT_POST,true);
-             curl_setopt($this->curl,CURLOPT_POSTFIELDS,$this->params);
+             if(is_array($this->params) && count($this->params) >= 1) {
+                 curl_setopt($this->curl,CURLOPT_POSTFIELDS,$this->params);
+             } else if(is_string($this->params) && strlen($this->params) >= 1) {
+                 curl_setopt($this->curl,CURLOPT_POSTFIELDS,$this->params);
+             }
          } else {
              curl_setopt($this->curl,CURLOPT_HTTPGET,true);
-             if(count($this->params) >= 1) {
+             if(is_array($this->params) && count($this->params) >= 1) {
                  $this->url .= '?' ;
                  foreach($this->params as $k=>$v) {
                      $this->url .= "&".urlencode($k)."=".urlencode($v);
@@ -33,7 +37,7 @@ class RestClient {
              }
          } 
          if($this->contentType != null) {
-             curl_setopt($this->curl,CURLOPT_HTTPHEADERS,array("Content-Type: ".$this->contentType));
+             curl_setopt($this->curl,CURLOPT_HTTPHEADER,array("Content-Type: ".$this->contentType));
          }
          curl_setopt($this->curl,CURLOPT_URL,$this->url);
          $r = curl_exec($this->curl);
@@ -42,6 +46,9 @@ class RestClient {
      }
 
      public function treatResponse($r) {
+        if($r == null or strlen($r) < 1) {
+            return;
+        }
         $parts  = explode("\n\r",$r);
         preg_match("@Content-Type: ([a-zA-Z0-9-]+/?[a-zA-Z0-9-]*)@",$parts[0],$reg);
         $this->headers['content-type'] = $reg[1];
@@ -111,7 +118,7 @@ class RestClient {
          return $this;
      }
 
-     public function setParameters(array $params) {
+     public function setParameters($params) {
          $this->params=$params;
          return $this;
      }
@@ -124,16 +131,17 @@ class RestClient {
          return $client;
      }
 
-     public static function post($url,array $params,$user=null,$pwd=null) {
+     public static function post($url,$params=null,$user=null,$pwd=null,$contentType="multipart/form-data") {
          return self::createClient($url)
              ->setParameters($params)
              ->setMethod("POST")
              ->setCredentials($user,$pwd)
+             ->setContentType($contentType)
              ->execute()
              ->close();
      }
 
-     public static function get($url,array $params,$user=null,$pwd=null) {
+     public static function get($url,array $params=null,$user=null,$pwd=null) {
          $client = self::createClient($url) ;
          $client->setParameters($params);
          $client->setMethod("GET");
