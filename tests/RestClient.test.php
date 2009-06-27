@@ -2,10 +2,10 @@
 // dummy example of RestTest
 include '../RestClient.class.php';
 $twitter = RestClient::post( // Same for RestClient::get()
-                "http://twitter.com/statuses/update.json"
-                ,array("status"=>"Working with RestClient from RestServer!") 
-                ,"username"
-                ,"password");
+            "http://twitter.com/statuses/update.json"
+            ,array("status"=>"Working with RestClient from RestServer!") 
+            ,"username"
+            ,"password");
 
 var_dump($twitter->getResponse());
 var_dump($twitter->getResponseCode());
@@ -13,7 +13,6 @@ var_dump($twitter->getResponseMessage());
 var_dump($twitter->getResponseContentType());
 
 // Other examples
-//
 $url = "http://example";
 $user = "user";
 $pwd = "password";

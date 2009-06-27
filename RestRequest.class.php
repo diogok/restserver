@@ -198,6 +198,16 @@ class RestRequest {
       else return $_PUT[$k];
     }
 
+
+    /**
+      * Return request BODY
+      * @return string 
+      */
+    public function getBody() {
+      $data = file_get_contents('php://input');
+      return $data;
+    }
+
     /**
       * Get authentication data on DIGEST
       * @return mixed
