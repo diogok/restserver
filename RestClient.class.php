@@ -3,7 +3,6 @@
 /**
  * Class RestClient
  * Wraps HTTP calls using cURL, aimed for accessing and testing RESTful webservice. 
- * Futher support for PUT method will be added, so will custom requests
  * By Diogo Souza da Silva <manifesto@manifesto.blog.br>
  */
 class RestClient {
