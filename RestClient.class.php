@@ -16,6 +16,7 @@ class RestClient {
      private $method="GET";
      private $params=null;
      private $contentType = null;
+     private $file =null;
 
      /**
       * Private Constructor, sets default options
@@ -36,15 +37,20 @@ class RestClient {
          if($this->method === "POST") {
              curl_setopt($this->curl,CURLOPT_POST,true);
              curl_setopt($this->curl,CURLOPT_POSTFIELDS,$this->params);
-         } else {
+         } else if($this->method == "GET"){
              curl_setopt($this->curl,CURLOPT_HTTPGET,true);
-             if(is_array($this->params) && count($this->params) >= 1) { // Transform parameters in key/value pars in URL
-                 $this->url .= '?' ;
-                 foreach($this->params as $k=>$v) {
-                     $this->url .= "&".urlencode($k)."=".urlencode($v);
-                 }
-             }
-         } 
+             $this->treatURL();
+         } else if($this->method === "PUT") {
+             curl_setopt($this->curl,CURLOPT_PUT,true);
+             $this->treatURL();
+             $this->file = tmpFile();
+             fwrite($this->file,$this->params);
+             fseek($this->file,0);
+             curl_setopt($this->curl,CURLOPT_INFILE,$this->file);
+             curl_setopt($this->curl,CURLOPT_INFILESIZE,strlen($this->params));
+         } else {
+             curl_setopt($this->curl,CURLOPT_CUSTOMREQUEST,$this->method);
+         }
          if($this->contentType != null) {
              curl_setopt($this->curl,CURLOPT_HTTPHEADER,array("Content-Type: ".$this->contentType));
          }
@@ -52,6 +58,20 @@ class RestClient {
          $r = curl_exec($this->curl);
          $this->treatResponse($r); // Extract the headers and response
          return $this ;
+     }
+
+     /**
+      * Treats URL
+      */
+     private function treatURL(){
+         if(is_array($this->params) && count($this->params) >= 1) { // Transform parameters in key/value pars in URL
+             if(!strpos($this->url,'?'))
+                 $this->url .= '?' ;
+             foreach($this->params as $k=>$v) {
+                 $this->url .= "&".urlencode($k)."=".urlencode($v);
+             }
+         }
+        return $url;
      }
 
      /*
@@ -136,6 +156,9 @@ class RestClient {
      public function close() {
          curl_close($this->curl);
          $this->curl = null ;
+         if($this->file !=null) {
+             fclose($this->file);
+         }
          return $this ;
      }
 
@@ -216,17 +239,24 @@ class RestClient {
       * @param mixed params
       * @param string $user=null [optional]
       * @param string $password=null [optional]
-      * @param string $contentType="multpary/form-data" [optional] commom post as default
+      * @param string $contentType="multpary/form-data" [optional] commom post (multipart/form-data) as default
       * @return RestClient
       */
      public static function post($url,$params=null,$user=null,$pwd=null,$contentType="multipart/form-data") {
-         return self::createClient($url)
-             ->setParameters($params)
-             ->setMethod("POST")
-             ->setCredentials($user,$pwd)
-             ->setContentType($contentType)
-             ->execute()
-             ->close();
+         return self::call("POST",$url,$params,$user,$pwd,$contentType);
+     }
+
+     /**
+      * Convenience method wrapping a commom PUT call
+      * @param string $url
+      * @param string $body 
+      * @param string $user=null [optional]
+      * @param string $password=null [optional]
+      * @param string $contentType=null [optional] 
+      * @return RestClient
+      */
+     public static function put($url,$body,$user=null,$pwd=null,$contentType=null) {
+         return self::call("PUT",$url,$body,$user,$pwd,$contentType);
      }
 
      /**
@@ -238,17 +268,40 @@ class RestClient {
       * @return RestClient
       */
      public static function get($url,array $params=null,$user=null,$pwd=null) {
-         $client = self::createClient($url) ;
-         $client->setParameters($params);
-         $client->setMethod("GET");
-         if($user != null) {
-             $client->setCredentials($user,$pwd);
-         }
-         $client->execute();
-         $client->close();
-         return $client ;
+         return self::call("GET",$url,$params,$user,$pwd);
      }
 
+     /**
+      * Convenience method wrapping a commom delete call
+      * @param string $url
+      * @param array params
+      * @param string $user=null [optional]
+      * @param string $password=null [optional]
+      * @return RestClient
+      */
+     public static function delete($url,array $params=null,$user=null,$pwd=null) {
+         return self::call("DELETE",$url,$params,$user,$pwd);
+     }
+
+     /**
+      * Convenience method wrapping a commom custom call
+      * @param string $method
+      * @param string $url
+      * @param string $body 
+      * @param string $user=null [optional]
+      * @param string $password=null [optional]
+      * @param string $contentType=null [optional] 
+      * @return RestClient
+      */
+     public static function call($method,$url,$body,$user=null,$pwd=null,$contentType=null) {
+         return self::createClient($url)
+             ->setParameters($body)
+             ->setMethod($method)
+             ->setCredentials($user,$pwd)
+             ->setContentType($contentType)
+             ->execute()
+             ->close();
+     }
 }
 
 ?>
