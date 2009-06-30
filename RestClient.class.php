@@ -70,7 +70,7 @@ class RestClient {
                  $this->url .= "&".urlencode($k)."=".urlencode($v);
              }
          }
-        return $url;
+        return $this->url;
      }
 
      /*
@@ -83,15 +83,17 @@ class RestClient {
         $parts  = explode("\n\r",$r); // HTTP packets define that Headers end in a blank line (\n\r) where starts the body
         if(preg_match('@HTTP/1.[0-1] 100 Continue@',$parts[0])) {
             // Continue header must be bypass
-            for($i=0;$i<count($parts);$i++) {
-                $parts[$i] = $parts[$i + 1];
+            for($i=1;$i<count($parts);$i++) {
+                $parts[$i - 1] = trim($parts[$i]);
             }
+            unset($parts[count($parts) - 1]);
         }
         preg_match("@Content-Type: ([a-zA-Z0-9-]+/?[a-zA-Z0-9-]*)@",$parts[0],$reg);// This extract the content type
         $this->headers['content-type'] = $reg[1];
         preg_match("@HTTP/1.[0-1] ([0-9]{3}) ([a-zA-Z ]+)@",$parts[0],$reg); // This extracts the response header Code and Message
         $this->headers['code'] = $reg[1];
         $this->headers['message'] = $reg[2];
+        $this->response = "";
         for($i=1;$i<count($parts);$i++) {//This make sure that exploded response get back togheter
             if($i > 1) {
                 $this->response .= "\n\r";
