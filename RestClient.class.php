@@ -81,7 +81,7 @@ class RestClient {
             return;
         }
         $parts  = explode("\n\r",$r); // HTTP packets define that Headers end in a blank line (\n\r) where starts the body
-        if(preg_match('@HTTP/1.[0-1] 100 Continue@',$parts[0])) {
+        while(preg_match('@HTTP/1.[0-1] 100 Continue@',$parts[0]) or preg_match("@Moved@",$parts[0])) {
             // Continue header must be bypass
             for($i=1;$i<count($parts);$i++) {
                 $parts[$i - 1] = trim($parts[$i]);
