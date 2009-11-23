@@ -1,4 +1,4 @@
-<?
+<?php
 // dummy example of RestTest
 include '../RestClient.class.php';
 $twitter = RestClient::post( // Same for RestClient::get()

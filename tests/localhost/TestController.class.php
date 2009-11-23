@@ -1,4 +1,4 @@
-<?
+<?php
 class TestController implements RestController {
 
     public function execute(RestServer $rest) {

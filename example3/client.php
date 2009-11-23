@@ -1,4 +1,4 @@
-<?
+<?php
 // This is a dummy client to test and consume the service
 include '../RestClient.class.php';
 

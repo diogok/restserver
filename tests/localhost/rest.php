@@ -1,4 +1,4 @@
-<?
+<?php
 
 include '../../RestServer.class.php';
 include 'TestController.class.php';
