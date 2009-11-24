@@ -1,4 +1,4 @@
 RewriteEngine on
-RewriteBase /
+RewriteBase /diogo/php_stuff/Classes/restserver/example2/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php?q=/$1
