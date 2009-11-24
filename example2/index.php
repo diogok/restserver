@@ -5,8 +5,7 @@ include '../RestServer.class.php';
 include '../GenericView.class.php';
 
 // As we use .htaccess, and if we are first diretory(/), RestServer can get the URL
-$rest = new RestServer ;
-
+$rest = new RestServer($_GET["q"]) ;
 
 /**
   * About the .htaccess, as we put the uri in the $_GET["q"] if we are the main directory it will work
