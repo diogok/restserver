@@ -1,2 +1,2 @@
 <h1>Homepage</h1>
-<?php var_Dump($param["user"]) ?>
+<?php echo $rest->getParameter("user")->name ?>
