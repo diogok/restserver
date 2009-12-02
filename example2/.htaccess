@@ -1,4 +1,0 @@
-RewriteEngine on
-RewriteBase /restserver/example2/
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ index.php?q=/$1
