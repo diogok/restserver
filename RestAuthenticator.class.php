@@ -115,7 +115,7 @@ class RestAuthenticator {
     * @return RestAuthenticator
     */
     public function requireAuthentication($isRequired=true) {
-        if($bol !== null) $this->requireAuth = $isRequired ;
+        if($isRequired !== null) $this->requireAuth = $isRequired ;
         return $this ;
     }
     
