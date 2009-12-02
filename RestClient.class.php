@@ -25,7 +25,7 @@ class RestClient {
          curl_setopt($this->curl,CURLOPT_RETURNTRANSFER,true);
          curl_setopt($this->curl,CURLOPT_AUTOREFERER,true); // This make sure will follow redirects
          curl_setopt($this->curl,CURLOPT_FOLLOWLOCATION,true); // This too
-         curl_setopt($this->curl,CURLOPT_HEADER,true); // THis verbose option for extracting the headers
+         curl_setopt($this->curl,CURLOPT_HEADER,true); // This verbose option for extracting the headers
      }
 
      /**
@@ -33,9 +33,19 @@ class RestClient {
       * @return RestClient
       */ 
      public function execute() {
+         if($this->contentType != null) {
+             curl_setopt($this->curl,CURLOPT_HTTPHEADER,array("Content-Type: ".$this->contentType));
+         }
          if($this->method === "POST") {
              curl_setopt($this->curl,CURLOPT_POST,true);
-             curl_setopt($this->curl,CURLOPT_POSTFIELDS,$this->params);
+             if(is_array($this->params)) {
+                 foreach($this->params as $k=>$v) {
+                     $params .= "$k=$v&";
+                 }
+             } else {
+                 $params = $this->params ;
+             }
+             curl_setopt($this->curl,CURLOPT_POSTFIELDS,$params);
          } else if($this->method == "GET"){
              curl_setopt($this->curl,CURLOPT_HTTPGET,true);
              $this->treatURL();
@@ -49,9 +59,6 @@ class RestClient {
              curl_setopt($this->curl,CURLOPT_INFILESIZE,strlen($this->params));
          } else {
              curl_setopt($this->curl,CURLOPT_CUSTOMREQUEST,$this->method);
-         }
-         if($this->contentType != null) {
-             curl_setopt($this->curl,CURLOPT_HTTPHEADER,array("Content-Type: ".$this->contentType));
          }
          curl_setopt($this->curl,CURLOPT_URL,$this->url);
          $r = curl_exec($this->curl);
@@ -95,6 +102,9 @@ class RestClient {
         $this->headers['message'] = $reg[2];
         $this->response = "";
         for($i=1;$i<count($parts);$i++) {//This make sure that exploded response get back togheter
+            if(($start = strpos($parts[$i],"\n")) !== false) {
+                $parts[$i] = substr($parts[$i],1);
+            }
             if($i > 1) {
                 $this->response .= "\n\r";
             }
@@ -103,6 +113,7 @@ class RestClient {
      }
 
      /*
+      * Array of headers
       * @return array
       */
      public function getHeaders() {
@@ -110,6 +121,7 @@ class RestClient {
      }
 
      /*
+      * Response body
       * @return string
       */ 
      public function getResponse() {
@@ -223,7 +235,7 @@ class RestClient {
 
      /**
       * Creates the RESTClient
-      * @param string $url=null [optional]
+      * @param string $url
       * @return RestClient
       */
      public static function createClient($url=null) {
@@ -237,51 +249,51 @@ class RestClient {
      /**
       * Convenience method wrapping a commom POST call
       * @param string $url
-      * @param mixed params
-      * @param string $user=null [optional]
-      * @param string $password=null [optional]
-      * @param string $contentType="multpary/form-data" [optional] commom post (multipart/form-data) as default
+      * @param mixed $params
+      * @param string $user
+      * @param string $password
+      * @param string $contentType 
       * @return RestClient
       */
-     public static function post($url,$params=null,$user=null,$pwd=null,$contentType="multipart/form-data") {
-         return self::call("POST",$url,$params,$user,$pwd,$contentType);
+     public static function post($url,$params=null,$user=null,$password=null,$contentType="application/x-www-form-urlencoded") {
+         return self::call("POST",$url,$params,$user,$password,$contentType);
      }
 
      /**
       * Convenience method wrapping a commom PUT call
       * @param string $url
       * @param string $body 
-      * @param string $user=null [optional]
-      * @param string $password=null [optional]
-      * @param string $contentType=null [optional] 
+      * @param string $user
+      * @param string $password
+      * @param string $contentType 
       * @return RestClient
       */
-     public static function put($url,$body,$user=null,$pwd=null,$contentType=null) {
-         return self::call("PUT",$url,$body,$user,$pwd,$contentType);
+     public static function put($url,$body,$user=null,$password=null,$contentType=null) {
+         return self::call("PUT",$url,$body,$user,$password,$contentType);
      }
 
      /**
       * Convenience method wrapping a commom GET call
       * @param string $url
       * @param array params
-      * @param string $user=null [optional]
-      * @param string $password=null [optional]
+      * @param string $user
+      * @param string $password
       * @return RestClient
       */
-     public static function get($url,array $params=null,$user=null,$pwd=null) {
-         return self::call("GET",$url,$params,$user,$pwd);
+     public static function get($url,array $params=null,$user=null,$password=null) {
+         return self::call("GET",$url,$params,$user,$password);
      }
 
      /**
       * Convenience method wrapping a commom delete call
       * @param string $url
       * @param array params
-      * @param string $user=null [optional]
-      * @param string $password=null [optional]
+      * @param string $user
+      * @param string $password
       * @return RestClient
       */
-     public static function delete($url,array $params=null,$user=null,$pwd=null) {
-         return self::call("DELETE",$url,$params,$user,$pwd);
+     public static function delete($url,array $params=null,$user=null,$password=null) {
+         return self::call("DELETE",$url,$params,$user,$password);
      }
 
      /**
@@ -289,16 +301,16 @@ class RestClient {
       * @param string $method
       * @param string $url
       * @param string $body 
-      * @param string $user=null [optional]
-      * @param string $password=null [optional]
-      * @param string $contentType=null [optional] 
+      * @param string $user
+      * @param string $password
+      * @param string $contentType 
       * @return RestClient
       */
-     public static function call($method,$url,$body,$user=null,$pwd=null,$contentType=null) {
+     public static function call($method,$url,$body,$user=null,$password=null,$contentType=null) {
          return self::createClient($url)
              ->setParameters($body)
              ->setMethod($method)
-             ->setCredentials($user,$pwd)
+             ->setCredentials($user,$password)
              ->setContentType($contentType)
              ->execute()
              ->close();

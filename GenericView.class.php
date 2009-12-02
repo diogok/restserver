@@ -11,8 +11,8 @@ class GenericView implements RestView {
 
     /**
       * Constructor of GenericView
-      * @param $file=null , The script to be rendered
-      * @param $props=null , Vars to be passed to the script
+      * @param string $file  The script to be rendered
+      * @param mixed $props  Vars to be passed to the script
       */
     function __construct($file=null,$props=null) {
         if($file != null) $this->file = $file ;
