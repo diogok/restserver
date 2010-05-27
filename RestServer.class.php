@@ -27,17 +27,19 @@ class RestServer {
     private $params ;
     private $stack ;
 
-    /** Contructor of RestServer
-    * @param string $query Optional query to be treat as the URL
-    * @return RestServer $rest;
+    /**
+     * Contructor of RestServer
+     * @param string $query Optional query to be treat as the URL
+     * @return RestServer $rest;
     */
     public function __construct($query=null) {
         $this->request = new RestRequest($this); // Request handler
         $this->response = new RestResponse($this); // Response holder
         $this->authenticator = new RestAuthenticator($this); // Authenticator holder
 
-        if(isset($_SERVER["HTTP_HOST"]))
+        if(isset($_SERVER["HTTP_HOST"])) {
             $this->baseUrl = "http://".$_SERVER["HTTP_HOST"].dirname($_SERVER["SCRIPT_NAME"]);
+        }
 
         // If will use custom URI or HTTP requested URI
         if($query===null) $this->query = $this->getRequest()->getRequestURI() ;
@@ -104,7 +106,11 @@ class RestServer {
     **/
     public function getQuery($k=null) { 
         if($k !== null){
-            return $this->qPart[$k];
+            if(isset($this->qPart[$k])) {
+                return $this->qPart[$k];
+            } else {
+                return '';
+            }
         }
         return $this->query ;
     }  
@@ -149,7 +155,7 @@ class RestServer {
     */
     public function getMap($method,$uri) {
         $maps = $this->map[$method];
-        if(count($maps) < 1) return false;
+        if(count($maps) < 1) { return false; }
         foreach($maps as $map=>$class) {
             if(preg_match("%^".$map."$%",$uri) ) {
                 return $class ;

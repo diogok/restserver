@@ -25,6 +25,12 @@ class Foobar implements RestController {
     public function auth(RestServer $rest) {
         $rest->getResponse()->setResponse($rest->getAuthenticator()->getUser());
     }
+    public function bench(RestServer $rest) {
+        $rest->getResponse()->appendResponse("It took ".round(xdebug_time_index(),5)." seconds <br/>");
+        $rest->getResponse()->appendResponse("Used ".round(xdebug_memory_usage()/1024,5)."Kb of Memory<br/>");
+        $rest->getResponse()->appendResponse("Used at peak ".round(xdebug_peak_memory_usage()/1024,5)."Kb of Memory<br/>");
+        return $rest;
+    }
 }
 
 class Echoer implements RestView {
@@ -42,7 +48,9 @@ class Echoer implements RestView {
     }
 }
 
-$r = new RestServer($_GET["q"]) ;
+$q = (isset($_GET["q"]))?$_GET["q"]:"";
+
+$r = new RestServer($q) ;
 
 $r->addMap("GET","/Foo","Foobar");
 $r->addMap("POST","/Foo","Foobar");
@@ -52,6 +60,7 @@ $r->addMap("POST","/Foo/hello","Foobar::foo");
 $r->addMap("GET","/Foo/hello/[\w]*","Foobar::foo");
 $r->addMap("GET","/Foo/restricted/basic","Foobar::auth");
 $r->addMap("GET","/Foo/restricted/digest","Foobar::auth");
+$r->addMap("GET","/Foo/bench","Foobar::bench");
 
 if($r->getQuery(2) == "restricted") {
     if($r->getQuery(3) == "basic") {

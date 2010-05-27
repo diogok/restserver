@@ -39,6 +39,7 @@ class RestClient {
          if($this->method === "POST") {
              curl_setopt($this->curl,CURLOPT_POST,true);
              if(is_array($this->params)) {
+                 $params = "";
                  foreach($this->params as $k=>$v) {
                      $params .= "$k=$v&";
                  }
@@ -71,10 +72,15 @@ class RestClient {
       */
      private function treatURL(){
          if(is_array($this->params) && count($this->params) >= 1) { // Transform parameters in key/value pars in URL
-             if(!strpos($this->url,'?'))
+             if(!strpos($this->url,'?')) {
                  $this->url .= '?' ;
+             }
+             $i = 0;
              foreach($this->params as $k=>$v) {
-                 $this->url .= "&".urlencode($k)."=".urlencode($v);
+                 if($i>0) $this->url .= "&";
+                 $this->url .= "&";
+                 $this->url .= urlencode($k)."=".urlencode($v);
+                 $i++;
              }
          }
         return $this->url;

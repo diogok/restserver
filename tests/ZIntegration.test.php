@@ -52,6 +52,12 @@ class ZIntegration_tests extends UnitTestCase {
         $c = RestClient::get($this->url."/Foo/restricted/digest");
         $this->assertEqual($c->getResponseCode(),401);
     }
+
+    function testUnpreciseBench() {
+        $c = RestClient::get($this->url."/Foo/bench");
+        echo $c->getResponse();
+    }
+
 }
 
 ?>

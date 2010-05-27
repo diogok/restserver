@@ -1,7 +1,5 @@
 <?php
 
-include_once 'RestServer.class.php';
-
 /**
  * Class RestAuthenticator
  * Responsible for dealing with both Basic and Digest authentication
@@ -15,6 +13,8 @@ class RestAuthenticator {
     private $authData ;
     private $isDigest =false;
     private $requireAuth =false;
+    private $auth;
+    private $realm;
 
     /**
      * RestAuthenticator constructor
