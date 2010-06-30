@@ -140,6 +140,13 @@ class RestRequest {
         else return $_PUT[$k];
     }
 
+    /**
+    * Return content sent with PUT
+    * @return mixed 
+    */
+    public function getInput() {
+        return file_get_contents('php://input');
+    }
 
     /**
     * Return request BODY
