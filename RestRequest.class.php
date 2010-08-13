@@ -153,8 +153,7 @@ class RestRequest {
     * @return string 
     */
     public function getBody() {
-        $data = file_get_contents('php://input');
-        return $data;
+        return $this->getInput();
     }
 
     /**

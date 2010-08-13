@@ -85,8 +85,7 @@ class RestResponse {
     * @return RestResponse
     */
     public function appendResponse($response) {
-        $this->response .= $response ;
-        return $this ;
+        return $this->addResponse($response);
     }
 
     /**
