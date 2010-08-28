@@ -1,19 +1,20 @@
 <?php
-include_once 'simpletest/autorun.php';
 include_once '../RestAuthenticator.class.php';
+include_once 'PHPUnit/Framework.php';
 
-class RestAuthenticator_tests extends UnitTestCase {
+
+class RestAuthenticatorTest extends PHPUnit_Framework_TestCase {
     function testFlags() {
         $r = new RestAuthenticator();
         $this->assertFalse($r->isDigest());
         $r->setRealm("foo");
-        $this->assertEqual($r->getRealm(),"foo");
+        $this->assertEquals($r->getRealm(),"foo");
         $r->forceDigest(true);
         $this->assertTrue($r->isAuthenticationRequired());
         $this->assertTrue($r->isDigest());
-        $this->assertEqual($r->getRealm(),"foo");
+        $this->assertEquals($r->getRealm(),"foo");
         $r->forceDigest(true,"hiho");
-        $this->assertEqual($r->getRealm(),"hiho");
+        $this->assertEquals($r->getRealm(),"hiho");
         $r->forceDigest(false);
         $this->assertFalse($r->isDigest());
         $this->assertTrue($r->isAuthenticationRequired());

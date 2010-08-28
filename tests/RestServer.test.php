@@ -1,24 +1,29 @@
 <?php
 
-include_once 'simpletest/autorun.php';
 include_once '../RestServer.class.php';
 
-class RestServer_tests extends UnitTestCase {
+class RestServerTest extends PHPUnit_Framework_TestCase {
     
+    function setup() {
+        $_SERVER["REQUEST_METHOD"] = "GET";
+        $_SERVER["REQUEST_URI"] = "/tests/foo.php";
+        $_SERVER["HTTP_ACCEPT"] = "text/html";
+    }
+
     function testParameter() {
         $r = new RestServer ;
         $r->setParameter("foo","bar");
-        $this->assertEqual($r->getParameter("foo"),"bar");
+        $this->assertEquals($r->getParameter("foo"),"bar");
     }
 
     function testQueries(){
         $r = new RestServer ;
         $t = count(explode("/",$_SERVER["REQUEST_URI"])) - 2;
-        $this->assertEqual($r->getQuery($t),"tests");
-        $this->assertEqual($r->getRequest()->getURI($t),"tests");
+        $this->assertEquals($r->getQuery($t),"tests");
+        $this->assertEquals($r->getRequest()->getURI($t),"tests");
         $r->setQuery("/teste/me");
-        $this->assertEqual($r->getQuery(2),"me");
-        $this->assertEqual($r->getRequest()->getURI(2),"me");
+        $this->assertEquals($r->getQuery(2),"me");
+        $this->assertEquals($r->getRequest()->getURI(2),"me");
     }
 
     function testMapping() {
@@ -29,12 +34,12 @@ class RestServer_tests extends UnitTestCase {
         $r->addMap("GET","/user/[a-z]+","Hal2");
         $r->addMap("GET","/user/[a-z]+/profile","Hal2::profile");
         $r->setQuery("/user");
-        $this->assertEqual($r->getMap("GET","/user"),"Foo");
-        $this->assertEqual($r->getMap("GET","/user/diogo"),"Bar");
-        $this->assertEqual($r->getMap("GET","/user/123"),"Hal");
-        $this->assertEqual($r->getMap("GET","/user/abc"),"Hal2");
-        $this->assertEqual($r->getMap("GET","/user/abc/profile"),"Hal2::profile");
-        $this->assertEqual($r->getMap("GET","/user/123abc"),null);
+        $this->assertEquals($r->getMap("GET","/user"),"Foo");
+        $this->assertEquals($r->getMap("GET","/user/diogo"),"Bar");
+        $this->assertEquals($r->getMap("GET","/user/123"),"Hal");
+        $this->assertEquals($r->getMap("GET","/user/abc"),"Hal2");
+        $this->assertEquals($r->getMap("GET","/user/abc/profile"),"Hal2::profile");
+        $this->assertEquals($r->getMap("GET","/user/123abc"),null);
     }
 
 }

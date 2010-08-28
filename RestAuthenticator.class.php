@@ -13,7 +13,7 @@ class RestAuthenticator {
     private $authData ;
     private $isDigest =false;
     private $requireAuth =false;
-    private $auth;
+    private $auth = false;
     private $realm;
 
     /**

@@ -1,15 +1,15 @@
 <?php
-include_once 'simpletest/autorun.php';
 include_once '../RestResponse.class.php';
+include_once 'PHPUnit/Framework.php';
 
-class RestResponse_Tests extends UnitTestCase {
+class RestResponseTest extends PHPUnit_Framework_TestCase {
     
     function testResponse() {
         $r = new RestResponse();
         $this->assertTrue($r->headerSent());
         $r->setResponse("foo");
         $r->appendResponse("bar");
-        $this->assertEqual($r->getResponse(),"foobar");
+        $this->assertEquals($r->getResponse(),"foobar");
     }
 
 }

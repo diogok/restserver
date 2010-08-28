@@ -1,16 +1,22 @@
 <?php
-include_once 'simpletest/autorun.php';
 include_once '../RestRequest.class.php';
+include_once 'PHPUnit/Framework.php';
 
-class RestRequest_tests extends UnitTestCase {
-    
+class RestRequestTest extends PHPUnit_Framework_TestCase {
+
+    function setup() {
+        $_SERVER["REQUEST_METHOD"] = "GET";
+        $_SERVER["REQUEST_URI"] = "/tests/foo.php";
+        $_SERVER["HTTP_ACCEPT"] = "text/html";
+    }
+
     function testMethod() {
         $r = new RestRequest();
         $this->assertFalse($r->isPost());
         $this->assertFalse($r->isPut());
         $this->assertFalse($r->isDelete());
         $this->assertTrue($r->isGet());
-        $this->assertEqual($r->getMethod(),"GET");
+        $this->assertEquals($r->getMethod(),"GET");
     }
 
     function testVars() {
@@ -18,26 +24,26 @@ class RestRequest_tests extends UnitTestCase {
         $_POST["foo"] = "bar";
         $_FILES["bar"] = "foo";
         $r = new RestRequest();
-        $this->assertEqual($r->getGet("a"),"aaa");
-        $this->assertEqual($r->getPost("foo"),"bar");
-        $this->assertEqual($r->getFiles("bar"),"foo");
+        $this->assertEquals($r->getGet("a"),"aaa");
+        $this->assertEquals($r->getPost("foo"),"bar");
+        $this->assertEquals($r->getFiles("bar"),"foo");
     }
 
     function testUri() {
         $r = new RestRequest();
         $t = count(explode("/",$_SERVER["REQUEST_URI"])) - 2;
-        $this->assertEqual($r->getURI($t),"tests");
-        $this->assertEqual($r->getURIPart($t),"tests");
+        $this->assertEquals($r->getURI($t),"tests");
+        $this->assertEquals($r->getURIPart($t),"tests");
         $r->setURI("/test/me/now.html");
-        $this->assertEqual($r->getURI(2),"me");
-        $this->assertEqual($r->getURIPart(3),"now.html");
+        $this->assertEquals($r->getURI(2),"me");
+        $this->assertEquals($r->getURIPart(3),"now.html");
     }
 
     function testTypes() {
         $r = new RestRequest();
         $this->assertTrue($r->acceptMime("text/html"));
         $this->assertFalse($r->acceptMime("application/json"));
-        $this->assertEqual($r->getExtension(),"php");
+        $this->assertEquals($r->getExtension(),"php");
     }
 
 }

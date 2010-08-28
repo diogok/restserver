@@ -26,9 +26,9 @@ class Foobar implements RestController {
         $rest->getResponse()->setResponse($rest->getAuthenticator()->getUser());
     }
     public function bench(RestServer $rest) {
-        $rest->getResponse()->appendResponse("It took ".round(xdebug_time_index(),5)." seconds <br/>");
-        $rest->getResponse()->appendResponse("Used ".round(xdebug_memory_usage()/1024,5)."Kb of Memory<br/>");
-        $rest->getResponse()->appendResponse("Used at peak ".round(xdebug_peak_memory_usage()/1024,5)."Kb of Memory<br/>");
+        $rest->getResponse()->appendResponse("It took ".round(xdebug_time_index(),5)." seconds\n");
+        $rest->getResponse()->appendResponse("Used ".round(xdebug_memory_usage()/1024,5)."Kb of Memory\n");
+        $rest->getResponse()->appendResponse("Used at peak ".round(xdebug_peak_memory_usage()/1024,5)."Kb of Memory\n");
         return $rest;
     }
 }
