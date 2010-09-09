@@ -23,14 +23,17 @@
 
 <p>You start by instanciating the RestServer at your end point, you may pass in a parameter to use as the url or let it guess, this will already prepare the Request, Response and Authenticator objects.
 <a href="http://github.com/diogok/JobJoker/blob/master/index.php#L28">index.php line 29</a>
+and
 <a href="http://github.com/diogok/ideaswallorg/blob/master/war/index.php#L11">index.php line 11</a></p>
 
 <p>You can also set global parameters objects that will be accessible on the controllers by using the "setParameter" and "getParameter" on the restserver. Next you must map your urls(using regex) to your controller (or to a specific method of a controller), also specify the http method used.
 <a href="http://github.com/diogok/JobJoker/blob/master/index.php#L44-64">index.php line 44~64</a>
+and
 <a href="http://github.com/diogok/ideaswallorg/blob/master/war/index.php#L34-42">index.php line 34~42</a></p>
 
 <p>To let the RestServer work, you just them need to call "execute".
 <a href="http://github.com/diogok/JobJoker/blob/master/index.php#L66">index.php line 66</a>
+and
 <a href="http://github.com/diogok/ideaswallorg/blob/master/war/index.php#L58">index.php line 58</a></p>
 
 <h3>RestAuthenticator</h3>
@@ -51,6 +54,8 @@
 - getURI to get the url of parts of it (parameters like)
 - isGet, isPost, isPut, isDelete </p>
 
-<p><a href="http://github.com/diogok/JobJoker/tree/master/controllers/">controllers</a>
-<a href="http://github.com/diogok/JobJoker/tree/master/views/">views</a>
-<a href="http://github.com/diogok/ideaswallorg/tree/master/war/controller/">controllers</a></p>
+<p><a href="http://github.com/diogok/JobJoker/tree/master/controllers/">controllers</a></p>
+
+<p><a href="http://github.com/diogok/JobJoker/tree/master/views/">views</a></p>
+
+<p><a href="http://github.com/diogok/ideaswallorg/tree/master/war/controller/">controllers</a></p>

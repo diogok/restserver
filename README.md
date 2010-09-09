@@ -23,14 +23,17 @@ Everything starts on the RestServer class, that must be instanciated. It works b
 
 You start by instanciating the RestServer at your end point, you may pass in a parameter to use as the url or let it guess, this will already prepare the Request, Response and Authenticator objects.
 [index.php line 29](http://github.com/diogok/JobJoker/blob/master/index.php#L28)
+and
 [index.php line 11](http://github.com/diogok/ideaswallorg/blob/master/war/index.php#L11)
 
 You can also set global parameters objects that will be accessible on the controllers by using the "setParameter" and "getParameter" on the restserver. Next you must map your urls(using regex) to your controller (or to a specific method of a controller), also specify the http method used.
 [index.php line 44~64](http://github.com/diogok/JobJoker/blob/master/index.php#L44-64)
+and
 [index.php line 34~42](http://github.com/diogok/ideaswallorg/blob/master/war/index.php#L34-42)
 
 To let the RestServer work, you just them need to call "execute".
 [index.php line 66](http://github.com/diogok/JobJoker/blob/master/index.php#L66)
+and
 [index.php line 58](http://github.com/diogok/ideaswallorg/blob/master/war/index.php#L58)
 
 ### RestAuthenticator
@@ -52,5 +55,8 @@ Use the methods from RestRequest:
 - isGet, isPost, isPut, isDelete 
 
 [controllers](http://github.com/diogok/JobJoker/tree/master/controllers/)
+
 [views](http://github.com/diogok/JobJoker/tree/master/views/)
+
 [controllers](http://github.com/diogok/ideaswallorg/tree/master/war/controller/)
+
