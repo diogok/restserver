@@ -26,6 +26,7 @@ class RestClient {
          curl_setopt($this->curl,CURLOPT_AUTOREFERER,true); // This make sure will follow redirects
          curl_setopt($this->curl,CURLOPT_FOLLOWLOCATION,true); // This too
          curl_setopt($this->curl,CURLOPT_HEADER,true); // This verbose option for extracting the headers
+         curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false); // This make sure it fail on SSL CA
      }
 
      /**
