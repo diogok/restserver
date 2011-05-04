@@ -1,11 +1,11 @@
 <?php
 
-include_once 'RestAction.class.php';
-include_once 'RestController.class.php';
-include_once 'RestView.class.php';
-include_once 'RestRequest.class.php';
-include_once 'RestResponse.class.php';
-include_once 'RestAuthenticator.class.php';
+include 'RestAction.class.php';
+include 'RestController.class.php';
+include 'RestView.class.php';
+include 'RestRequest.class.php';
+include 'RestResponse.class.php';
+include 'RestAuthenticator.class.php';
 
 /**
 * Class RestServer 
