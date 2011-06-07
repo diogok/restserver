@@ -8,9 +8,13 @@ class ZIntegrationTest extends PHPUnit_Framework_TestCase {
     function setup() {
         //$r = new RestServer();
         //$this->url = $r->getBaseUrl()."/server.php?q=";
-        $this->url = "http://localhost/diogo/php_stuff/restserver/tests/server.php?q=";
+        $this->url = "http://localhost/diogo/restserver/tests/server.php?q=";
     }
 
+    function testSimpleGetLambda() {
+        $c = RestClient::get($this->url."/Lambda");
+        $this->assertEquals($c->getResponse(),"Hello Closure!");
+    }
     function testSimpleGet() {
         $c = RestClient::get($this->url."/Foo");
         $this->assertEquals($c->getResponse(),"Hello World!");

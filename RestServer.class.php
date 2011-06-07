@@ -194,25 +194,35 @@ class RestServer {
         }
 
         // In case a specific method should be called
-        if(count($parts = explode("::",$responseClass)) > 1) {
+        if(is_string($responseClass) && count($parts = explode("::",$responseClass)) > 1) {
             $responseClass = $parts[0];
             $responseMethod = $parts[1];
         }
 
-        return $this->call(new $responseClass,$responseMethod)->show(); // Call the class and return the response
+        $responseObject = new StdClass ;
+
+        if(is_callable($responseClass)) {
+            $responseObject = $responseClass; 
+        } else {
+            $responseObject = new $responseClass;
+        }
+
+        return $this->call($responseObject,$responseMethod)->show(); // Call the class and return the response
     }
 
     private function call($class,$method=null) {             
         $this->stack[] = get_class($class) ;
-        if($method != null) {
+        if(is_callable($class)) {
+            $class = $class($this);
+        } else if($method != null) {
+            $class = $class->$method($this);
         } else if($class instanceof RestView) { // If is a view, call Show($restServer)
-            $method="show";
+            $class = $class->show($this);
         } else if($class instanceof RestController)  {  //If is a controller, call execute($restServer)
-            $method="execute";
+            $class = $class->execute($this);
         } else {
             Throw new Exception(get_class($class)." is not a RestAction");
         }
-        $class = $class->$method($this);
 
         if($class instanceof RestAction 
             && get_class($class) != $this->lastClass() ) {

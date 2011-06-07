@@ -15,6 +15,7 @@ class Foobar implements RestController {
     public function foo(RestServer $rest) {
         if(($name = $rest->getQuery(3)) == null && ($name = $rest->getRequest()->getPost("name")) == null) {
             $name = "RestServer";
+        } else {
         }
         $rest->getResponse()->setResponse("Hello , ".ucfirst($name).".");
         return $rest;
@@ -61,6 +62,10 @@ $r->addMap("GET","/Foo/hello/[\w]*","Foobar::foo");
 $r->addMap("GET","/Foo/restricted/basic","Foobar::auth");
 $r->addMap("GET","/Foo/restricted/digest","Foobar::auth");
 $r->addMap("GET","/Foo/bench","Foobar::bench");
+$r->addMap("GET","/Lambda",function($rest) {
+    $rest->getResponse()->setResponse("Hello Closure!");
+    return $rest;
+});
 
 if($r->getQuery(2) == "restricted") {
     if($r->getQuery(3) == "basic") {

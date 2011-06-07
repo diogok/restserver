@@ -26,7 +26,7 @@ You start by instanciating the RestServer at your end point, you may pass in a p
 and
 [index.php line 11](http://github.com/diogok/ideaswallorg/blob/master/war/index.php#L11)
 
-You can also set global parameters objects that will be accessible on the controllers by using the "setParameter" and "getParameter" on the restserver. Next you must map your urls(using regex) to your controller (or to a specific method of a controller), also specify the http method used.
+You can also set global parameters objects that will be accessible on the controllers by using the "setParameter" and "getParameter" on the restserver. Next you must map your urls(using regex) to your controller (or to a specific method of a controller), also specify the http method used. An alternative is to give an anonymous function (lambda or closure).
 [index.php line 44~64](http://github.com/diogok/JobJoker/blob/master/index.php#L44-64)
 and
 [index.php line 34~42](http://github.com/diogok/ideaswallorg/blob/master/war/index.php#L34-42)
