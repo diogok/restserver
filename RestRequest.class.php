@@ -199,6 +199,15 @@ class RestRequest {
     }
 
     /**
+    * alias to getURIPart
+    * @param int $i part of the uri
+    * @return string
+    */
+    public function getParameter($i) {
+        return $this->getURIParts($i);
+    }
+
+    /**
     * Return part of the URL
     * @param int $i part of the uri
     * @return string
