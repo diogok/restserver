@@ -16,7 +16,38 @@ There are two published examples:
 
 ## Usage
 
+[API](http://diogok.net/restserver/docs)
+
+[Example server.php](https://github.com/diogok/restserver/blob/master/tests/server.php)
+
+    <?php
+        $rest = new RestServer ;
+
+        $rest->addMap("POST","/user", function($rest) {
+                $json = $rest->getRequest()->getBody(); // the body, getPOST($key) is also available for form submissions
+                // go to db and save it
+                $rest->getResponse()->addHeader("201 Created");
+                $rest->getResponse()->setResponse('{"ok":true}');
+                return $rest;
+            });
+
+        $rest->addMap("GET","/user/[\w]+",function($rest) {
+                $rest->getAuthenticator()->requireAuthentication(true);
+                $username = $rest->getRequest()->getParameter(2); // url parameter
+                if(!($username == $rest->getAuthenticator()->getUser())) { ; // Basic or Digest authentication
+                    $rest->getAuthenticator()->setAuthenticated(false); // Request authentication
+                    return $rest;
+                }else {
+                    $rest->getAuthenticator()->setAuthenticated(true); // Request authentication
+                }
+                $rest->getResponse()->setResponse("Hello, ". $username);
+                return $rest;
+            });
+
+        echo $rest->execute();
+    ?>
 ### RestServer
+
 
 Everything starts on the RestServer class, that must be instanciated. It works better with proper URLRewriting urls, but that is no mandatory. A example of .htaccess is :
 [.htaccess](http://github.com/diogok/JobJoker/blob/master/.htaccess)

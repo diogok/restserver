@@ -16,6 +16,38 @@
 
 <h2>Usage</h2>
 
+<p><a href="http://diogok.net/restserver/docs">API</a></p>
+
+<p><a href="https://github.com/diogok/restserver/blob/master/tests/server.php">Example server.php</a></p>
+
+<pre><code>&lt;?php
+    $rest = new RestServer ;
+
+    $rest-&gt;addMap("POST","/user", function($rest) {
+            $json = $rest-&gt;getRequest()-&gt;getBody(); // the body, getPOST($key) is also available for form submissions
+            // go to db and save it
+            $rest-&gt;getResponse()-&gt;addHeader("201 Created");
+            $rest-&gt;getResponse()-&gt;setResponse('{"ok":true}');
+            return $rest;
+        });
+
+    $rest-&gt;addMap("GET","/user/[\w]+",function($rest) {
+            $rest-&gt;getAuthenticator()-&gt;requireAuthentication(true);
+            $username = $rest-&gt;getRequest()-&gt;getParameter(2); // url parameter
+            if(!($username == $rest-&gt;getAuthenticator()-&gt;getUser())) { ; // Basic or Digest authentication
+                $rest-&gt;getAuthenticator()-&gt;setAuthenticated(false); // Request authentication
+                return $rest;
+            }else {
+                $rest-&gt;getAuthenticator()-&gt;setAuthenticated(true); // Request authentication
+            }
+            $rest-&gt;getResponse()-&gt;setResponse("Hello, ". $username);
+            return $rest;
+        });
+
+    echo $rest-&gt;execute();
+?&gt;
+</code></pre>
+
 <h3>RestServer</h3>
 
 <p>Everything starts on the RestServer class, that must be instanciated. It works better with proper URLRewriting urls, but that is no mandatory. A example of .htaccess is :
@@ -26,7 +58,7 @@
 and
 <a href="http://github.com/diogok/ideaswallorg/blob/master/war/index.php#L11">index.php line 11</a></p>
 
-<p>You can also set global parameters objects that will be accessible on the controllers by using the "setParameter" and "getParameter" on the restserver. Next you must map your urls(using regex) to your controller (or to a specific method of a controller), also specify the http method used.
+<p>You can also set global parameters objects that will be accessible on the controllers by using the "setParameter" and "getParameter" on the restserver. Next you must map your urls(using regex) to your controller (or to a specific method of a controller), also specify the http method used. An alternative is to give an anonymous function (lambda or closure).
 <a href="http://github.com/diogok/JobJoker/blob/master/index.php#L44-64">index.php line 44~64</a>
 and
 <a href="http://github.com/diogok/ideaswallorg/blob/master/war/index.php#L34-42">index.php line 34~42</a></p>
