@@ -6,7 +6,7 @@ class RestResponseTest extends PHPUnit_Framework_TestCase {
     
     function testResponse() {
         $r = new RestResponse();
-        $this->assertTrue($r->headerSent());
+        $this->assertFalse($r->headerSent());
         $r->setResponse("foo");
         $r->appendResponse("bar");
         $this->assertEquals($r->getResponse(),"foobar");

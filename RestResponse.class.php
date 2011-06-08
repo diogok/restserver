@@ -71,6 +71,17 @@ class RestResponse {
     }
 
     /**
+    * Sends the partial response already, skip buffering, good for big responses
+    * @param mixed $response
+    * @return RestResponse
+    */
+    public function sendResponse($response) {
+        if(!$this->headerSent()) $this->showHeader();
+        echo $response ;
+        return $this;
+    }
+
+    /**
     * Set the response to null
     * @return RestResponse
     */
