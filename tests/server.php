@@ -1,6 +1,7 @@
 <?php
 
-include_once "../RestServer.class.php";
+//include_once "../RestServer.class.php";
+include '../restserver.phar';
 
 class Foobar implements RestController {
     public function execute(RestServer $rest) {
