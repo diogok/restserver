@@ -31,9 +31,9 @@ There are two published examples:
                 return $rest;
             });
 
-        $rest->addMap("GET","/user/[\w]+",function($rest) {
+        $rest->addMap("GET","/user/:name",function($rest) {
                 $rest->getAuthenticator()->requireAuthentication(true);
-                $username = $rest->getRequest()->getParameter(2); // url parameter
+                $username = $rest->getRequest()->getParameter("name"); // url parameter
                 if(!($username == $rest->getAuthenticator()->getUser())) { ; // Basic or Digest authentication
                     $rest->getAuthenticator()->setAuthenticated(false); // Request authentication
                     return $rest;

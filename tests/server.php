@@ -1,7 +1,6 @@
 <?php
 
-//include_once "../RestServer.class.php";
-include '../restserver.phar';
+include_once "../RestServer.class.php";
 
 class Foobar implements RestController {
     public function execute(RestServer $rest) {
@@ -65,6 +64,10 @@ $r->addMap("GET","/Foo/restricted/digest","Foobar::auth");
 $r->addMap("GET","/Foo/bench","Foobar::bench");
 $r->addMap("GET","/Lambda",function($rest) {
     $rest->getResponse()->setResponse("Hello Closure!");
+    return $rest;
+});
+$r->addMap("GET","/hello/:name",function($rest) {
+    $rest->getResponse()->setResponse("Hello, ". $rest->getRequest()->getParameter("name")."!");
     return $rest;
 });
 

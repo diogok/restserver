@@ -1,5 +1,5 @@
 <?php
-include_once '../RestRequest.class.php';
+include_once '../RestServer.class.php';
 include_once 'PHPUnit/Framework.php';
 
 class RestRequestTest extends PHPUnit_Framework_TestCase {
@@ -37,6 +37,15 @@ class RestRequestTest extends PHPUnit_Framework_TestCase {
         $r->setURI("/test/me/now.html");
         $this->assertEquals($r->getURI(2),"me");
         $this->assertEquals($r->getURIPart(3),"now.html");
+    }
+
+    function testNamed() {
+        $rs = new RestServer ;
+        $rs->setMatch(array("","user",":me"));
+        $r = $rs->getRequest();
+        $r->setURI("/user/diogo");
+        $this->assertEquals($r->getURI("me"),"diogo");
+        $this->assertEquals($r->getURI("user"),null);
     }
 
     function testTypes() {

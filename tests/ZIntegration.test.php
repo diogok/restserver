@@ -58,10 +58,16 @@ class ZIntegrationTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($c->getResponseCode(),401);
     }
 
+    function testNamed() {
+        $c = RestClient::get($this->url."/hello/Gi");
+        $this->assertEquals($c->getResponse(),"Hello, Gi!");
+    }
+
     function testUnpreciseBench() {
         $c = RestClient::get($this->url."/Foo/bench");
         echo $c->getResponse();
     }
+
 
 }
 

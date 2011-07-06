@@ -21,9 +21,9 @@ class RestServer {
 
     private $baseUrl ; 
     private $query ;
-    private $qPart;
 
     private $map ;
+    private $matched ;
     private $params ;
     private $stack ;
 
@@ -47,7 +47,7 @@ class RestServer {
 
         $this->getRequest()->setURI($this->query);
 
-        $this->qPart = explode("/",$this->query);
+        $this->matched = false;
     }
 
     /**
@@ -88,14 +88,8 @@ class RestServer {
     * @param int $k the part of the url to change
     * @return RestServer $this
     */
-    public function setQuery($value,$k=null) {
-        if($k !== null){
-            $this->qPart[$k]  = $value ;               
-        } else {
-            $this->query = $value ;
-            $this->qPart = explode("/",$value );
-            $this->getRequest()->setURI($value);
-        }
+    public function setQuery($value) {
+        $this->getRequest()->setURI($value);
         return $this ;
     }
 
@@ -105,14 +99,7 @@ class RestServer {
     * @return string
     **/
     public function getQuery($k=null) { 
-        if($k !== null){
-            if(isset($this->qPart[$k])) {
-                return $this->qPart[$k];
-            } else {
-                return '';
-            }
-        }
-        return $this->query ;
+        return $this->getRequest()->getURI($k);
     }  
 
     /**
@@ -156,12 +143,40 @@ class RestServer {
     public function getMap($method,$uri) {
         $maps = $this->map[$method];
         if(count($maps) < 1) { return false; }
-        foreach($maps as $map=>$class) {
-            if(preg_match("%^".$map."$%",$uri) ) {
+        foreach($maps as $pattern=>$class) {
+            $parts = explode("/",$pattern) ;
+            $map = array() ;
+            foreach($parts as $part) {
+                if(isset($part[0]) && $part[0] == ":") {
+                    $map[] = "[^/]+";
+                } else {
+                    $map[] = $part;
+                }
+            }
+            if(preg_match("%^".implode("/", $map )."$%",$uri) ) {
+                $this->setMatch($parts);
                 return $class ;
             }
         }
         return false ;
+    }
+
+    /**
+     * Set matched pattern
+     * @param array $map
+     * @return RestServer
+     */
+    public function setMatch($map) {
+        $this->matched = $map;
+        return $this;
+    }
+
+    /**
+     * Get matched pattern
+     * @return array
+     */
+    public function getMatch() {
+        return $this->matched;
     }
 
     /**

@@ -204,7 +204,7 @@ class RestRequest {
     * @return string
     */
     public function getParameter($i) {
-        return $this->getURIParts($i);
+        return $this->getURIPart($i);
     }
 
     /**
@@ -213,10 +213,22 @@ class RestRequest {
     * @return string
     */
     public function getURIpart($i) {
-        if(isset($this->URIParts[$i]))
+        if(is_string($i)) {
+            $map = $this->getRest()->getMatch();
+            if($map) {
+                foreach($map as $n=>$name) {
+                    if($name == ":".$i) {
+                        return $this->getURI($n);
+                    }
+                }
+            } else {
+                return null;
+            }
+        } else if(is_int($i) && isset($this->URIParts[$i])) {
             return $this->URIParts[$i];
-        else
+        } else {
             return null;
+        }
     }
 
     /**

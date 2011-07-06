@@ -31,9 +31,9 @@
             return $rest;
         });
 
-    $rest-&gt;addMap("GET","/user/[\w]+",function($rest) {
+    $rest-&gt;addMap("GET","/user/:name",function($rest) {
             $rest-&gt;getAuthenticator()-&gt;requireAuthentication(true);
-            $username = $rest-&gt;getRequest()-&gt;getParameter(2); // url parameter
+            $username = $rest-&gt;getRequest()-&gt;getParameter("name"); // url parameter
             if(!($username == $rest-&gt;getAuthenticator()-&gt;getUser())) { ; // Basic or Digest authentication
                 $rest-&gt;getAuthenticator()-&gt;setAuthenticated(false); // Request authentication
                 return $rest;

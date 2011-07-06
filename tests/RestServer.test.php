@@ -33,6 +33,8 @@ class RestServerTest extends PHPUnit_Framework_TestCase {
         $r->addMap("GET","/user/[0-9]+","Hal");
         $r->addMap("GET","/user/[a-z]+","Hal2");
         $r->addMap("GET","/user/[a-z]+/profile","Hal2::profile");
+        $r->addMap("GET","/user2/:name","Named");
+        $r->addMap("GET","/user2/:name/:id","Named2");
         $r->setQuery("/user");
         $this->assertEquals($r->getMap("GET","/user"),"Foo");
         $this->assertEquals($r->getMap("GET","/user/diogo"),"Bar");
@@ -40,6 +42,8 @@ class RestServerTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($r->getMap("GET","/user/abc"),"Hal2");
         $this->assertEquals($r->getMap("GET","/user/abc/profile"),"Hal2::profile");
         $this->assertEquals($r->getMap("GET","/user/123abc"),null);
+        $this->assertEquals($r->getMap("GET","/user2/abc"),"Named");
+        $this->assertEquals($r->getMap("GET","/user2/abc/123"),"Named2");
     }
 
 }
