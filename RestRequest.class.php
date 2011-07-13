@@ -219,6 +219,8 @@ class RestRequest {
                 foreach($map as $n=>$name) {
                     if($name == ":".$i) {
                         return $this->getURI($n);
+                    }else if($name == ":?".$i) {
+                        return $this->getURI($n);
                     }
                 }
             } else {

@@ -147,7 +147,9 @@ class RestServer {
             $parts = explode("/",$pattern) ;
             $map = array() ;
             foreach($parts as $part) {
-                if(isset($part[0]) && $part[0] == ":") {
+                if(isset($part[0]) && $part[0] == ":" && $part[1] == "?") {
+                    $map[] = "?[^/]*";
+                } else if(isset($part[0]) && $part[0] == ":") {
                     $map[] = "[^/]+";
                 } else {
                     $map[] = $part;
