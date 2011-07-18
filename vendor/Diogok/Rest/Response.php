@@ -1,8 +1,10 @@
 <?php
 /**
-  * RestResponse hold the response in a RestServer
-  */
-class RestResponse {
+ * RestResponse hold the response in a Server
+ * Namespace update: zeflasher
+ */
+namespace Diogok\Rest;
+class Response {
 
     private $rest ; 
 
@@ -15,7 +17,7 @@ class RestResponse {
     * Constructor of RestServer
     * @param RestServer $rest
     */
-    public function __contruct(RestServer $rest=null) {
+    public function __contruct(Server $rest=null) {
         $this->rest = $rest ;
     }
 
@@ -23,7 +25,7 @@ class RestResponse {
     /**
     * Adds a header to the response
     * @param string $header
-    * @return RestResponse
+    * @return \Diogok\Rest\Response
     */
     public function addHeader($header) {
         $this->headers[] = $header;
@@ -32,7 +34,7 @@ class RestResponse {
 
     /**
     * Clean the headers set on the response
-    * @return RestResponse
+    * @return \Diogok\Rest\Response
     */
     public function cleanHeader() {
         $this->headers = Array();
@@ -41,7 +43,7 @@ class RestResponse {
 
     /**
     * Show the headers
-    * @return RestResponse
+    * @return \Diogok\Rest\Response
     */
     public function showHeader() {
         if(count($this->headers) >=1) {
@@ -63,7 +65,7 @@ class RestResponse {
     /**
     * Set the response
     * @param mixed $response
-    * @return RestResponse
+    * @return \Diogok\Rest\Response
     */
     public function setResponse($response) {
         $this->response = $response ;
@@ -73,7 +75,7 @@ class RestResponse {
     /**
     * Sends the partial response already, skip buffering, good for big responses
     * @param mixed $response
-    * @return RestResponse
+    * @return \Diogok\Rest\Response
     */
     public function sendResponse($response) {
         if(!$this->headerSent()) $this->showHeader();
@@ -83,7 +85,7 @@ class RestResponse {
 
     /**
     * Set the response to null
-    * @return RestResponse
+    * @return \Diogok\Rest\Response
     */
     public function cleanResponse() {
         $this->response = null ;
@@ -93,7 +95,7 @@ class RestResponse {
     /**
     * Add a string to the response, only work if response is a string
     * @param string $response
-    * @return RestResponse
+    * @return \Diogok\Rest\Response
     */
     public function appendResponse($response) {
         return $this->addResponse($response);
@@ -102,7 +104,7 @@ class RestResponse {
     /**
     * Add a string to the response, only work if response is a string
     * @param string $response
-    * @return RestResponse
+    * @return \Diogok\Rest\Response
     */
     public function addResponse($response) {
         $this->response .= $response ;

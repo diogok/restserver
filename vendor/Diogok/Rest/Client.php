@@ -1,11 +1,13 @@
 <?php
 
 /**
- * Class RestClient
+ * Class Client
  * Wraps HTTP calls using cURL, aimed for accessing and testing RESTful webservice. 
  * By Diogo Souza da Silva <manifesto@manifesto.blog.br>
+ * Namespace update: zeflasher
  */
-class RestClient {
+namespace Diogok\Rest;
+class Client {
 
      private $curl ;
      private $url ;
@@ -161,7 +163,7 @@ class RestClient {
 
      /**
       * This sets that will not follow redirects
-      * @return RestClient
+      * @return \Diogok\Rest\Client
       */
      public function setNoFollow() {
          curl_setopt($this->curl,CURLOPT_AUTOREFERER,false);
@@ -171,7 +173,7 @@ class RestClient {
 
      /**
       * This closes the connection and release resources
-      * @return RestClient
+      * @return \Diogok\Rest\Client
       */
      public function close() {
          curl_close($this->curl);
@@ -182,10 +184,11 @@ class RestClient {
          return $this ;
      }
 
-     /**
-      * Sets the URL to be Called
-      * @return RestClient
-      */
+    /**
+     * Sets the URL to be Called
+     * @param string $url
+     * @return \Diogok\Rest\Client
+     */
      public function setUrl($url) {
          $this->url = $url; 
          return $this;
@@ -195,7 +198,7 @@ class RestClient {
       * Set the Content-Type of the request to be send
       * Format like "application/xml" or "text/plain" or other
       * @param string $contentType
-      * @return RestClient
+      * @return \Diogok\Rest\Client
       */
      public function setContentType($contentType) {
          $this->contentType = $contentType;
@@ -206,7 +209,7 @@ class RestClient {
       * Set the Credentials for BASIC Authentication
       * @param string $user
       * @param string $pass
-      * @return RestClient
+      * @return \Diogok\Rest\Client
       */
      public function setCredentials($user,$pass) {
          if($user != null) {
@@ -220,7 +223,7 @@ class RestClient {
       * Set the Request HTTP Method
       * For now, only accepts GET and POST
       * @param string $method
-      * @return RestClient
+      * @return \Diogok\Rest\Client
       */
      public function setMethod($method) {
          $this->method=$method;
@@ -233,7 +236,7 @@ class RestClient {
       * or a string containing the body of the request, like a XML, JSON or other
       * Proper content-type should be set for the body if not a array
       * @param mixed $params
-      * @return RestClient
+      * @return \Diogok\Rest\Client
       */
      public function setParameters($params) {
          $this->params=$params;
@@ -243,10 +246,10 @@ class RestClient {
      /**
       * Creates the RESTClient
       * @param string $url
-      * @return RestClient
+      * @return \Diogok\Rest\Client
       */
      public static function createClient($url=null) {
-         $client = new RestClient ;
+         $client = new Client ;
          if($url != null) {
              $client->setUrl($url);
          }
@@ -260,7 +263,7 @@ class RestClient {
       * @param string $user
       * @param string $password
       * @param string $contentType 
-      * @return RestClient
+      * @return \Diogok\Rest\Client
       */
      public static function post($url,$params=null,$user=null,$password=null,$contentType="application/x-www-form-urlencoded") {
          return self::call("POST",$url,$params,$user,$password,$contentType);
@@ -273,7 +276,7 @@ class RestClient {
       * @param string $user
       * @param string $password
       * @param string $contentType 
-      * @return RestClient
+      * @return \Diogok\Rest\Client
       */
      public static function put($url,$body,$user=null,$password=null,$contentType=null) {
          return self::call("PUT",$url,$body,$user,$password,$contentType);
@@ -285,7 +288,7 @@ class RestClient {
       * @param array params
       * @param string $user
       * @param string $password
-      * @return RestClient
+      * @return \Diogok\Rest\Client
       */
      public static function get($url,array $params=null,$user=null,$password=null) {
          return self::call("GET",$url,$params,$user,$password);
@@ -297,7 +300,7 @@ class RestClient {
       * @param array params
       * @param string $user
       * @param string $password
-      * @return RestClient
+      * @return \Diogok\Rest\Client
       */
      public static function delete($url,array $params=null,$user=null,$password=null) {
          return self::call("DELETE",$url,$params,$user,$password);
@@ -311,7 +314,7 @@ class RestClient {
       * @param string $user
       * @param string $password
       * @param string $contentType 
-      * @return RestClient
+      * @return \Diogok\Rest\Client
       */
      public static function call($method,$url,$body,$user=null,$password=null,$contentType=null) {
          return self::createClient($url)

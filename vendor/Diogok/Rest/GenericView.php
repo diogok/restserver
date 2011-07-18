@@ -1,10 +1,12 @@
 <?php
 
 /**
-  * Class GenericView
-  * A GenericView representation, throws the result of a script into the Response
-  */
-class GenericView implements RestView {
+ * Class GenericView
+ * A GenericView representation, throws the result of a script into the Response
+ * Namespace update: zeflasher`
+ */
+namespace Diogok\Rest;
+class GenericView implements View {
 
     protected $file ;
     protected $props ;
@@ -21,10 +23,10 @@ class GenericView implements RestView {
 
     /**
       * Render the selected script
-      * @param RestServer $rest 
-      * @return RestServer
+      * @param \Diogok\Rest\Server $rest
+      * @return \Diogok\Rest\Server
       */
-    function show(RestServer $rest) {
+    function show(Server $rest) {
         ob_start();
         $params = $this->props ;
         include $this->file ;

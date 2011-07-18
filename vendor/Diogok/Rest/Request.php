@@ -1,9 +1,11 @@
 <?php
 
-/** Class RestRequest
-  * Holds the Request in a RestServer
-  */
-class RestRequest {
+/** Class Request
+ * Holds the Request in a Server
+ * Namespace update: zeflasher
+ */
+namespace Diogok\Rest;
+class Request {
 
     private $rest ;
 
@@ -17,9 +19,9 @@ class RestRequest {
 
     /**
     * Constructor of RestRequest
-    * @param RestServer $rest = null, Parent RestServer
+    * @param \Diogok\Rest\Server $rest = null, Parent RestServer
     */
-    public function __construct(RestServer $rest=null) {
+    public function __construct(Server $rest=null) {
 
         // Sets most of the parameters
         $this->rest = $rest ;
@@ -37,8 +39,8 @@ class RestRequest {
     }
 
     /**
-    * Return  RestServer used;
-    * @return RestServer
+    * Return  Server used;
+    * @return \Diogok\Rest\Server
     */
     public function getRest() {
         return $this->rest;
@@ -183,7 +185,7 @@ class RestRequest {
     /**
     * Set request method
     * @param string $method
-    * @return RestRequest
+    * @return \Diogok\Rest\Request
     */
     public function setMethod($method) {
         $this->requestMethod = $method ;
@@ -228,9 +230,9 @@ class RestRequest {
             }
         } else if(is_int($i) && isset($this->URIParts[$i])) {
             return $this->URIParts[$i];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -246,7 +248,7 @@ class RestRequest {
     /**
     * Sets the URI to deal
     * @param string $uri
-    * @return RestRequest 
+    * @return \Diogok\Rest\Request
     */
     public function setURI($uri) {
         $this->requestURI = $uri;
