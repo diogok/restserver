@@ -1,10 +1,12 @@
 <?php
 
 /**
- * Class RestAuthenticator
+ * Class Authenticator
  * Responsible for dealing with both Basic and Digest authentication
+ * Namespace update: zeflasher
  */
-class RestAuthenticator {
+namespace Diogok\Rest;
+class Authenticator {
 
     private $rest ;
     
@@ -17,10 +19,10 @@ class RestAuthenticator {
     private $realm;
 
     /**
-     * RestAuthenticator constructor
-     * @param RestServer $rest
+     * Authenticator constructor
+     * @param \Diogok\Rest\Server|null $rest
      */
-    public function __construct(RestServer $rest=null) {
+    public function __construct(Server $rest=null) {
         $this->rest = $rest ;
 
         if(isset($_SERVER['PHP_AUTH_DIGEST']))
@@ -46,10 +48,9 @@ class RestAuthenticator {
     }
     
     /**
-     * Return internal RestServer
-    * Return  RestServer used;
-    * @return RestServer
-    */
+     * Return internal Server
+     * @return \Diogok\Rest\Server|null
+     */
     public function getRest() {
         return $this->rest;
     }
@@ -82,7 +83,7 @@ class RestAuthenticator {
     * Set if authentication should be Digest(true) 
     * @param bool $bool
     * @param string $realm
-    * @return RestAuthenticator
+    * @return \Diogok\Rest\Authenticator
     */
     public function forceDigest($bool=true,$realm=null) {
         if($realm != null) $this->setRealm($realm);
@@ -102,7 +103,7 @@ class RestAuthenticator {
     /**
     * Set the http Realm name
     * @param string $realm
-    * @return RestAuthenticator
+    * @return \Diogok\Rest\Authenticator
     */
     public function setRealm($realm) {
         $this->realm = $realm ;
@@ -112,7 +113,7 @@ class RestAuthenticator {
     /**
     * Sets if authentication is required
     * @param bool $isRequered 
-    * @return RestAuthenticator
+    * @return \Diogok\Rest\Authenticator
     */
     public function requireAuthentication($isRequired=true) {
         if($isRequired !== null) $this->requireAuth = $isRequired ;
@@ -138,7 +139,7 @@ class RestAuthenticator {
     /**
     * Sets authentication status
     * @param bool $auth Status
-    * @return RestServer
+    * @return \Diogok\Rest\Server
     */
     public function setAuthenticated($bool) {
         $this->auth = $bool;
@@ -169,7 +170,7 @@ class RestAuthenticator {
     * Test authentication against password for given username in Digest 
     * @param string $user
     * @param string $password
-    * @return RestAuthenticator
+    * @return \Diogok\Rest\Authenticator
     */
     public function validate($user,$password) {
         if($this->isDigest()) {
@@ -236,7 +237,5 @@ class RestAuthenticator {
         return $str;
     }
 
-    
 }
-
 ?>

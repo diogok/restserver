@@ -1,19 +1,12 @@
 <?php
-
-include 'RestAction.class.php';
-include 'RestController.class.php';
-include 'RestView.class.php';
-include 'RestRequest.class.php';
-include 'RestResponse.class.php';
-include 'RestAuthenticator.class.php';
-
 /**
-* Class RestServer 
+* Class Server
 * Is the front controller for mapping URL to controllers and dealing with Request/Response and Headers
 * Made with Restful webservices in mind.
 * By Diogo Souza da Silva <manifesto@manifesto.blog.br>
 */
-class RestServer {
+namespace Diogok\Rest;
+class Server {
 
     private $response ;
     private $request ;
@@ -33,9 +26,9 @@ class RestServer {
      * @return RestServer $rest;
     */
     public function __construct($query=null) {
-        $this->request = new RestRequest($this); // Request handler
-        $this->response = new RestResponse($this); // Response holder
-        $this->authenticator = new RestAuthenticator($this); // Authenticator holder
+        $this->request = new Request($this); // Request handler
+        $this->response = new Response($this); // Response holder
+        $this->authenticator = new Authenticator($this); // Authenticator holder
 
         if(isset($_SERVER["HTTP_HOST"])) {
             $this->baseUrl = "http://".$_SERVER["HTTP_HOST"].dirname($_SERVER["SCRIPT_NAME"]);
@@ -54,7 +47,7 @@ class RestServer {
     * Sets a parameter in a global scope that can be recovered at any request.
     * @param mixed $key The identifier of the parameter
     * @param mixed $value The content of the parameter
-    * @return RestServer $this
+    * @return \Diogok\Rest\Server
     */
     public function setParameter($key,$value) {
         $this->params[$key] = $value ;
@@ -75,7 +68,7 @@ class RestServer {
     * @param string $method The method to be associated
     * @param string $uri The URL to be accossiated
     * @param string $class The name of the class to be called, it must implement RestAction
-    * @return RestServer $this
+    * @return \Diogok\Rest\Server
     */
     public function addMap($method,$uri,$class) {
         $this->map[$method][$uri] = $class ;
@@ -86,7 +79,7 @@ class RestServer {
     * Set the URL to be handle or part of it
     * @param mixed $value The url
     * @param int $k the part of the url to change
-    * @return RestServer $this
+    * @return \Diogok\Rest\Server
     */
     public function setQuery($value) {
         $this->getRequest()->setURI($value);
@@ -112,7 +105,7 @@ class RestServer {
 
     /**
     * Get the Response handler object
-    * @return RestResponse
+    * @return \Diogok\Rest\Response
     */
     public function getResponse() {
         return $this->response ;
@@ -120,7 +113,7 @@ class RestServer {
 
     /**
      * Get the Request handler object
-    * @return RestRequest
+    * @return \Diogok\Rest\Request
     */
     public function getRequest() {
         return $this->request ;
@@ -128,7 +121,7 @@ class RestServer {
 
     /**
      * Get the Authentication handler object
-    * @return RestAuthenticator
+    * @return \Diogok\Rest\Authenticator
     */
     public function getAuthenticator() {
         return $this->authenticator ;
@@ -166,7 +159,7 @@ class RestServer {
     /**
      * Set matched pattern
      * @param array $map
-     * @return RestServer
+     * @return \Diogok\Rest\Server
      */
     public function setMatch($map) {
         $this->matched = $map;
@@ -216,7 +209,7 @@ class RestServer {
             $responseMethod = $parts[1];
         }
 
-        $responseObject = new StdClass ;
+        $responseObject = new \stdClass() ;
 
         if(is_callable($responseClass)) {
             $responseObject = $responseClass; 
@@ -233,15 +226,15 @@ class RestServer {
             $class = $class($this);
         } else if($method != null) {
             $class = $class->$method($this);
-        } else if($class instanceof RestView) { // If is a view, call Show($restServer)
+        } else if($class instanceof View) { // If is a view, call Show($restServer)
             $class = $class->show($this);
-        } else if($class instanceof RestController)  {  //If is a controller, call execute($restServer)
+        } else if($class instanceof Controller)  {  //If is a controller, call execute($restServer)
             $class = $class->execute($this);
         } else {
-            Throw new Exception(get_class($class)." is not a RestAction");
+            Throw new \Exception(get_class($class)." is not a RestAction");
         }
 
-        if($class instanceof RestAction 
+        if($class instanceof Action
             && get_class($class) != $this->lastClass() ) {
             return $this->call($class); // May have another class to follow the request
         }
