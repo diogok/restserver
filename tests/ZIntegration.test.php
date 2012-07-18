@@ -63,6 +63,17 @@ class ZIntegrationTest extends UnitTestCase {
         $this->assertEqual($c->getResponse(),"Hello, Gi!");
     }
 
+    function testExtension() {
+        $c = Rest\Client::get($this->url."/mime");
+        $this->assertEqual($c->getResponse(),"Hello, !");
+        $c = Rest\Client::get($this->url."/mime.html");
+        $this->assertEqual($c->getResponse(),"Hello, html!");
+        $c = Rest\Client::get($this->url."/nomime");
+        $this->assertEqual($c->getResponseCode(),400);
+        $c = Rest\Client::get($this->url."/nomime.html");
+        $this->assertEqual($c->getResponse(),"Hello, html!");
+    }
+
     function testUnpreciseBench() {
         $c = Rest\Client::get($this->url."/Foo/bench");
         echo $c->getResponse();

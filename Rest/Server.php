@@ -42,7 +42,7 @@ class Server {
     private $baseUrl ; 
     private $query ;
 
-    public $map ;
+    private $map ;
     private $matched ;
     private $params ;
     private $stack ;
@@ -123,8 +123,10 @@ class Server {
         }
         if($accept != null) {
             $bkpAccept = array();
-            foreach($olAccept as $acc) {
-                $bkpAccept[] = $acc[0];
+            if(isset($olAccept)) {
+                foreach($olAccept as $acc) {
+                    $bkpAccept[] = $acc[0];
+                }
             }
             $this->setAccept($bkpAccept);
         }
@@ -137,6 +139,7 @@ class Server {
         $this->accept = array();
         $sys = file_get_contents("/etc/mime.types");
         $lines  = explode("\n",$sys);
+        if(!is_array($mimes) || count($mimes) < 1) return $this;
         if($mimes[0] == "*") {
             $this->accept[] = array("*",array("*",""));
         }
@@ -214,6 +217,7 @@ class Server {
     public function getMap($method,$uri,$ext=false) {
         if(count($this->map) < 1) { return false; }
         if($ext === false) $ext = '*';
+        else  $uri = substr($uri,0,strlen($uri) - strlen($ext) - 1);
         foreach($this->map as $pattern=>$options) {
             $parts = explode("/",$pattern) ;
             $map = array() ;

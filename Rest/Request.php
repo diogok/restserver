@@ -265,10 +265,12 @@ class Request {
     public function getExtension() {
         $reg = array();
         preg_match('@\.([a-zA-Z0-9]{1,5})$@',$this->getURI(),$reg);
-        if(isset($reg[1]))
+        if(isset($reg[1])) {
             return $reg[1];
-        else
+        }
+        else {
             return false;
+        }
     }
 
     /**

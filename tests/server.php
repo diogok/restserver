@@ -70,6 +70,14 @@ $r->addMap("GET","/hello/:name",function($rest) {
     $rest->getResponse()->setResponse("Hello, ". $rest->getRequest()->getParameter("name")."!");
     return $rest;
 });
+$r->addMap("GET","/mime",function($rest) {
+    $rest->getResponse()->setResponse("Hello, ". $rest->getRequest()->getExtension()."!");
+    return $rest;
+}, array("*","text/html"));
+$r->addMap("GET","/nomime",function($rest) {
+    $rest->getResponse()->setResponse("Hello, ". $rest->getRequest()->getExtension()."!");
+    return $rest;
+}, array("text/html"));
 
 if($r->getQuery(2) == "restricted") {
     if($r->getQuery(3) == "basic") {
