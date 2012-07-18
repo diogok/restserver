@@ -1,13 +1,12 @@
 <?php
 
-include_once '../Rest/Server.php';
 include_once '../Rest/Client.php';
 include_once '../tests/simpletest/autorun.php';
 
 class Example extends UnitTestCase {
 
     function setup() {
-        $this->url = "http://".$_SERVER["HTTP_HOST"].dirname($_SERVER["SCRIPT_NAME"])."/../example";
+        $this->url = "http://".$_SERVER["HTTP_HOST"].dirname($_SERVER["SCRIPT_NAME"]);
     }
 
     function testUserInsertion() {

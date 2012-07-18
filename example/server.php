@@ -1,7 +1,8 @@
 <?php
 
 // First we include the restserver lib
-include '../restserver.phar';
+//include '../restserver.phar';
+include '../Rest/Server.php';
 
 
 // Them we instantiate the server
@@ -57,11 +58,10 @@ function authenticate($server) {
 // A URL to map (this case is root "/") and a handler
 // The handler can be a closure receiving the server instance
 // Or your own Controller that implements RestController
-
 $server->addMap("GET","/",function($server) {
     // This class will redirect to index.html
     return new Rest\Controller\Redirect("index.html");
-},array("text/html")); // The last parameter on the mapping can override server accepted mimes
+},array("*","text/html")); // The last parameter on the mapping can override server accepted mimes
 
 
 $server->addMap("GET","/index",function($server) {
