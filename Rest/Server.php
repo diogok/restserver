@@ -42,7 +42,7 @@ class Server {
     private $baseUrl ; 
     private $query ;
 
-    private $map ;
+    public $map ;
     private $matched ;
     private $params ;
     private $stack ;
@@ -111,8 +111,8 @@ class Server {
     */
     public function addMap($method,$uri,$class,$accept=null) {
         if(isset($this->accept)) $olAccept = $this->accept ;
-        if($accept != null)  $this->setAccept($accept);
-        if(isset($this->accept ) and is_array($this->accept)) {
+        if($accept != null) $this->setAccept($accept);
+        if(isset($this->accept) and is_array($this->accept)) {
             foreach($this->accept as $accept) {
                 foreach($accept[1] as $ext){
                     $this->map[$uri][strtoupper($method)][$ext] = $class ;
@@ -121,7 +121,13 @@ class Server {
         } else {
             $this->map[$uri][strtoupper($method)]['*'] = $class ;
         }
-        if($accept != null )$this->setAccept($olAccept);
+        if($accept != null) {
+            $bkpAccept = array();
+            foreach($olAccept as $acc) {
+                $bkpAccept[] = $acc[0];
+            }
+            $this->setAccept($bkpAccept);
+        }
         return $this ;
     }
 
@@ -131,6 +137,9 @@ class Server {
         $this->accept = array();
         $sys = file_get_contents("/etc/mime.types");
         $lines  = explode("\n",$sys);
+        if($mimes[0] == "*") {
+            $this->accept[] = array("*",array("*",""));
+        }
         foreach($lines as $line){
             if(strlen($line) < 3 or $line[0] == "#") continue;
             if(preg_match('@^([^\t\s]+)[\t\s]+(.*)$@',$line,$reg)) {
