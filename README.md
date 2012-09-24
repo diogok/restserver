@@ -34,3 +34,7 @@ Based on the [namespaces branch](http://github.com/diogok/restserver/tree/namesp
 
 ## More on REST
 
+## License
+
+Distributed under the Eclipse Public License.
+
