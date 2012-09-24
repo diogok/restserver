@@ -33,7 +33,7 @@ class Example extends UnitTestCase {
         $this->assertEqual($c->getResponseCode(),404);
     }
 
-    function testCanUpdate() {
+    function testCanUpdateUser() {
         $c = Rest\Client::put($this->url."/users/diogok",json_encode(array("login"=>"diogok","password"=>"123456","name"=>"Diogo Silva")),"diogok","123456","application/json");
         $this->assertEqual($c->getResponseCode(),200);
         $c = Rest\Client::get($this->url."/users/diogok",null,"diogok","123456");
