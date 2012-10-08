@@ -1,16 +1,15 @@
 <?php
 namespace Rest;
 
-/**
-  * Class Rest_View
+ /**
+  * Class Rest\View
   * Interface describe a View for rendering an Response
   */
 interface View extends Action {
 	/**
 	* Render this view
-	* Show($restServer)
-	* @param RestServer $restServer
-	* @return RestServer 
+	* @param Rest\Server $restServer
+	* @return Rest\Server 
 	*/
 	function execute(Server $restServer) ;
 }

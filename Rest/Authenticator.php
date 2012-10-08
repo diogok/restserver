@@ -2,7 +2,7 @@
 namespace Rest;
 
  /**
-  * Class Rest_Authenticator
+  * Class Rest\Authenticator
   * Responsible for dealing with both Basic and Digest authentication
   */
 class Authenticator {
@@ -18,8 +18,8 @@ class Authenticator {
     private $auth = false;
 
     /**
-     * Rest_Authenticator constructor
-     * @param RestServer $rest
+     * Rest\Authenticator constructor
+     * @param Rest\Server $rest
      */
     public function __construct(Server $rest=null) {
         $this->rest = $rest ;
@@ -46,32 +46,31 @@ class Authenticator {
         }
     }
     
-    /**
-     * Return internal RestServer
-    * Return  RestServer used;
-    * @return RestServer
+   /**
+    * Return internal Rest\Server object
+    * @return Rest\Server
     */
     public function getRest() {
         return $this->rest;
     }
     
     /**
-    * Return user sent on BASIC Authentication
-    * @return string
-    */
+     * Return user sent on BASIC Authentication
+     * @return string
+     */
     public function getUser() {
         return $this->user;
     }
 
     /**
-    * Return password sent for Authentication
-    * @return string
-    */
+     * Return password sent for Authentication
+     * @return string
+     */
     public function getPassword() {
         return $this->pwd ;
     }
     
-    /**
+   /**
     * Return if is using digest authentication
     * @return bool
     */
@@ -79,11 +78,11 @@ class Authenticator {
         return $this->isDigest ;
     }
 
-    /**
+   /**
     * Set if authentication should be Digest(true) 
     * @param bool $bool
     * @param string $realm
-    * @return RestAuthenticator
+    * @return Rest\Authenticator
     */
     public function forceDigest($bool=true,$realm=null) {
         if($realm != null) $this->setRealm($realm);
@@ -92,7 +91,7 @@ class Authenticator {
         return $this;
     }
 
-    /**
+   /**
     * Get the http Realm name
     * @return string $realm
     */
@@ -100,7 +99,7 @@ class Authenticator {
         return $this->realm;
     }
 
-    /**
+   /**
     * Set the http Realm name
     * @param string $realm
     * @return RestAuthenticator
@@ -110,7 +109,7 @@ class Authenticator {
         return $this;
     }
 
-    /**
+   /**
     * Sets if authentication is required
     * @param bool $isRequered 
     * @return RestAuthenticator
@@ -120,7 +119,7 @@ class Authenticator {
         return $this ;
     }
     
-    /**
+   /**
     * Checks if authenticated is required
     * @return bool $auth;
     */
@@ -128,7 +127,7 @@ class Authenticator {
         return $this->requireAuth ;
     }
 
-    /**
+   /**
     * Checks if is authenticated
     * @return bool $auth;
     */
@@ -136,17 +135,17 @@ class Authenticator {
         return $this->auth ;
     }
 
-    /**
+   /**
     * Sets authentication status
     * @param bool $auth Status
-    * @return RestServer
+    * @return Rest\Server
     */
     public function setAuthenticated($bool) {
         $this->auth = $bool;
         return $this ;
     }
     
-    /**
+   /**
     * Test if user is authenticated, and set proper headers if not
     * @return bool
     */
@@ -166,7 +165,7 @@ class Authenticator {
         return true ;
     }
     
-    /**
+   /**
     * Test authentication against password for given username in Digest 
     * @param string $user
     * @param string $password
@@ -237,6 +236,5 @@ class Authenticator {
         return $str;
     }
 
-    
 }
 

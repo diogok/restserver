@@ -9,10 +9,8 @@ class Client {
 
      private $curl ;
      private $url ;
-
      private $response = "";
      private $headers = array();
-
      private $method = "GET";
      private $params = null;
      private $contentType = null;

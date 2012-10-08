@@ -1,11 +1,10 @@
 <?php
 namespace Rest;
 
- /**
-  * Class Rest_Action
-  * Inteface for a possible action for to be taken by RestServer
-  */
+/**
+ * Class Rest\Action
+ * Inteface for a possible action for to be taken by Rest\Server
+ */
 interface Action {
-
 }
 

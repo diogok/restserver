@@ -1,8 +1,9 @@
 <?php
 namespace Rest;
 
- /** Class Rest_Request
-  * Holds the Request in a RestServer
+ /**
+  * Class Rest_Request
+  * Holds the Request in a Rest\Server
   */
 
 class Request {
@@ -18,9 +19,9 @@ class Request {
     private $files ;
     private $headers ;
 
-    /**
-    * Constructor of RestRequest
-    * @param RestServer $rest = null, Parent RestServer
+   /**
+    * Constructor of Rest\Request
+    * @param Rest\Server $rest = null, Parent Rest\Server
     */
     public function __construct(Server $rest=null) {
 
@@ -53,15 +54,15 @@ class Request {
         }
     }
 
-    /**
-    * Return  RestServer used;
-    * @return RestServer
+   /**
+    * Return  Rest\Server used
+    * @return Rest\Server
     */
     public function getRest() {
         return $this->rest;
     }
 
-    /**
+   /**
     * Returns if Request is GET
     * @return boolean
     */
@@ -72,7 +73,7 @@ class Request {
         return false;
     }
 
-    /** 
+   /** 
     * Returns if Request is POST
     * @return boolean
     */
@@ -83,7 +84,7 @@ class Request {
         return false;
     }
 
-    /**
+   /**
     * Return if Request is PUT
     * @return boolean
     */
@@ -94,7 +95,7 @@ class Request {
         return false;
     }
 
-    /**
+   /**
     * Return true if Request is DELETE
     * @return boolean
     */
@@ -106,7 +107,7 @@ class Request {
     }
 
 
-    /** 
+   /** 
     * Get parameters sent with GET (url parameters)
     * @param mixed $k get[$key]
     * @return mixed
@@ -117,7 +118,7 @@ class Request {
         else return null;
     }
 
-    /**
+   /**
     * Return parameters sent on a POST
     * @param mixed $k post[$key]
     * @return mixed
@@ -128,8 +129,8 @@ class Request {
         else return null;
     }
 
-    /**
-    * Return FILES sent on a POSt
+   /**
+    * Return FILES sent on a POST
     * @param mixed $k file[$key]
     * @return mixed
     */
@@ -138,7 +139,7 @@ class Request {
         else return $this->files[$k];
     }
 
-    /**
+   /**
     * Return content sent with PUT
     * @param mixed $k
     * @return mixed 
@@ -159,7 +160,7 @@ class Request {
         else return $_PUT[$k];
     }
 
-    /**
+   /**
     * Return content sent with PUT
     * @return mixed 
     */
@@ -167,7 +168,7 @@ class Request {
         return file_get_contents('php://input');
     }
 
-    /**
+   /**
     * Return request BODY
     * @return string 
     */
@@ -184,11 +185,20 @@ class Request {
     }
 
 
+    /**
+     * Return value of http header
+     * @param string $k
+     * @return string
+     */
     public function getHeader($k) {
         if(isset($this->headers[$k])) return $this->headers[$k];
         else return null;
     }
 
+    /**
+     * Return E-tag/if-match requested
+     * @return string
+     */
     public function getETag() {
         return $this->getheader("If-Match");
     }
@@ -196,7 +206,7 @@ class Request {
    /**
     * Set request method
     * @param string $method
-    * @return RestRequest
+    * @return Rest\Request
     */
     public function setMethod($method) {
         $this->requestMethod = $method ;
@@ -250,7 +260,7 @@ class Request {
    /**
     * Sets the URI to deal
     * @param string $uri
-    * @return RestRequest 
+    * @return Rest\Request 
     */
     public function setURI($uri) {
         $this->requestURI = $uri;
