@@ -183,7 +183,6 @@ class Request {
         return $this->requestMethod ;
     }
 
-
     public function getHeader($k) {
         if(isset($this->headers[$k])) return $this->headers[$k];
         else return null;
@@ -284,6 +283,36 @@ class Request {
         } else {
             return false ;
         }
+    }
+
+    /**
+     */
+    public function getSession($k) {
+        if(!isset($_SESSION[$k])) return null;
+        else return $_SESSION[$k];
+    }
+
+    /**
+     */
+    public function setSession($k,$v) {
+        $_SESSION[$k] = $v;
+        $$k = $v;
+        @session_register($k);
+        return $this;
+    }
+
+    /**
+     */
+    public function getCookie($k) {
+        if(!isset($_COOKIE[$k])) return null;
+        else return $_COOKIE[$k];
+    }
+
+    /*
+     */
+    public function setCookie($k,$v) {
+        $_COOKIE[$k] = $v;
+        setcookie($k,$v);
     }
 
 }
