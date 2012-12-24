@@ -234,6 +234,9 @@ class Server {
                 if(isset($this->map[$pattern][strtoupper($method)][$ext])) {
                     $this->setMatch($parts);
                     return $this->map[$pattern][strtoupper($method)][$ext] ;
+                } else if(isset($this->map[$pattern][strtoupper($method)]['*'])) {
+                    $this->setMatch($parts);
+                    return $this->map[$pattern][strtoupper($method)]['*'] ;
                 } else if(isset($this->map[$pattern][strtoupper($method)])) {
                     return "\\Rest\\Controller\\NotAcceptable";
                 } else if(strtoupper( $method ) == "HEAD"){
@@ -299,7 +302,7 @@ class Server {
         if(!$this->getResponse()->headerSent()) $this->getResponse()->showHeader(); // Call headers, if no yet
         $r = $this->getResponse()->getResponse();
         if($echo && strlen($r) >= 1) {
-            if($this->getRequest()->getMethod() == "GET") {
+            if($this->getRequest()->getMethod() == "GET" || $this->getRequest()->getMethod() == "HEAD") {
                 $this->getResponse()->addheader("E-Tag: ".md5($r));
             }
             echo $r;
@@ -310,7 +313,7 @@ class Server {
     private function call($object,$method) {             
         $this->stack[] = get_class($object) ;
         if(!($object instanceof Action)) {
-            Throw new Exception(get_class($object)." is not a Rest\\Action");
+            Throw new \Exception(get_class($object)." is not a Rest\\Action");
         } else {
             $class = $object->$method($this);
         }

@@ -55,7 +55,7 @@ class RestServerTest extends UnitTestCase {
         $this->assertEqual($r->getMap("GET","/user",false),"Foo");
         $this->assertEqual($r->getMap("GET","/user.html",'html'),"Foo");
         $this->assertEqual($r->getMap("GET","/user.json",'json'),"Foo");
-        $this->assertEqual($r->getMap("GET","/user.xml",'xml'),"\\Rest\\Controller\\NotAcceptable");
+        $this->assertEqual($r->getMap("GET","/user.xml",'xml'),"Foo");
         $this->assertEqual($r->getMap("GET","/user/diogo.json",'json'),"Bar");
         $this->assertEqual($r->getMap("GET","/user/diogo.html",'html'),"\\Rest\\Controller\\NotAcceptable");
     }

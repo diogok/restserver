@@ -1,7 +1,8 @@
 <?php
 namespace Rest;
 
- /** Class Rest_Request
+/** 
+  * Class Rest_Request
   * Holds the Request in a RestServer
   */
 
@@ -29,9 +30,14 @@ class Request {
 
         if(isset($_SERVER["REQUEST_METHOD"]))
             $this->requestMethod = $_SERVER["REQUEST_METHOD"];
-        if(isset($_SERVER["REQUEST_URI"]))
+        if(isset($_SERVER["REDIRECT_URL"])) 
+            $this->requestURI = $_SERVER["REDIRECT_URL"];
+        else if(isset($_SERVER["REQUEST_URI"]))
             $this->requestURI = $_SERVER["REQUEST_URI"];
         $this->URIParts = explode("/",$this->requestURI);
+
+        $this->domain = $_SERVER["HTTP_HOST"];
+        $this->URL = "http://".$this->domain.$this->requestURI;
 
         $this->get = $_GET?$_GET:array() ;
         $this->post = $_POST?$_POST:array() ;
