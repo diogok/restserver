@@ -1,6 +1,6 @@
 <?php
 
-include_once '../Rest/Authenticator.php';
+include_once '../src/Rest/Authenticator.php';
 include_once 'simpletest/autorun.php';
 
 class RestAuthenticatorTest extends UnitTestCase {

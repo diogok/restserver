@@ -2,7 +2,7 @@
 
 // First we include the restserver lib
 //include '../restserver.phar';
-include '../Rest/Server.php';
+include '../src/Rest/Server.php';
 
 
 // Them we instantiate the server

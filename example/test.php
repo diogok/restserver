@@ -1,6 +1,6 @@
 <?php
 
-include_once '../Rest/Client.php';
+include_once '../src/Rest/Client.php';
 include_once '../tests/simpletest/autorun.php';
 
 class Example extends UnitTestCase {

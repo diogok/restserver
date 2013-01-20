@@ -1,7 +1,7 @@
 <?php
 if(file_exists("restserver.phar")) unlink("restserver.phar");
 $phar = new Phar("restserver.phar",0,"restserver.phar");
-$phar->buildFromDirectory(dirname(__FILE__)."/Rest");
+$phar->buildFromDirectory(dirname(__FILE__)."/src/Rest");
 $stub = <<<EOSTUB
 <?php
     Phar::mapPhar("restserver.phar");

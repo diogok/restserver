@@ -1,5 +1,5 @@
 <?php
-include_once '../Rest/Response.php';
+include_once '../src/Rest/Response.php';
 include_once 'simpletest/autorun.php';
 
 class RestResponseTest extends UnitTestCase {

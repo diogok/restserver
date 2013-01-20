@@ -1,6 +1,6 @@
 <?php
 
-include_once '../Rest/Server.php';
+include_once '../src/Rest/Server.php';
 include_once 'simpletest/autorun.php';
 
 class RestServerTest extends UnitTestCase {

@@ -1,6 +1,6 @@
 <?php
 
-include_once "../Rest/Server.php";
+include_once "../src/Rest/Server.php";
 
 class Foobar implements Rest\Controller {
     public function execute(Rest\Server $rest) {

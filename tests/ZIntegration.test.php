@@ -1,6 +1,6 @@
 <?php
-include_once '../Rest/Server.php';
-include_once '../Rest/Client.php';
+include_once '../src/Rest/Server.php';
+include_once '../src/Rest/Client.php';
 include_once 'simpletest/autorun.php';
 
 class ZIntegrationTest extends UnitTestCase {
