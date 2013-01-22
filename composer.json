@@ -1,5 +1,5 @@
 {
-    "name":"diogok/restserver",
+    "name":"restserver/restserver",
     "type":"library",
     "description":"Simple and organized Restful web services",
     "keywords":["http","rest"],

@@ -14,7 +14,7 @@ The simplest way is using _composer_, just declare the restserver dependency in 
 
     {
         "require":{
-            "diogok/restserver": "*"
+            "restserver/restserver": "*"
         }
     }
 
