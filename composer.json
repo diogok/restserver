@@ -3,7 +3,7 @@
     "type":"library",
     "description":"Simple and organized Restful web services",
     "keywords":["http","rest"],
-    "homepage":["http://github.com/diogok/restserver"],
+    "homepage":"http://github.com/diogok/restserver",
     "license":"EPL",
     "autoload": {
         "psr-0": {
