@@ -87,12 +87,12 @@ class Server {
 
     /**
     * Return all parameter
-    * @param mixed $key The parameter identifier
-    * @return mixed
+    * @return array
     */
     public function getParameters() {
         return $this->params;
     }
+
     /**
     * Return the specified parameter
     * @param mixed $key The parameter identifier
