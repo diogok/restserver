@@ -2,7 +2,7 @@
 
 RestServer is a PHP library/framework for building RESTful webservices and also websites.
 
-It allows you to route *Method*,*URI* and *MIME-TYPE* to specific *Resource*s handlers, access the *Request*ed data and provide a proper *Response*.
+It allows you to route _Method_,_URI_ and _MIME-TYPE_ to specific Resources handlers, access the Requested data and provide a proper Response.
 
 Here it's decribe its documentation, together with the example folder and tests for reference.
 
@@ -10,14 +10,15 @@ This version is based on the [namespaces branch](http://github.com/diogok/restse
 
 ## Usage
     
-The simplest way is using *composer*, just declare the restserver dependency in you composer.json:
+The simplest way is using _composer_, just declare the restserver dependency in you composer.json:
+
     {
         "require":{
             "diogok/restserver": "*"
         }
     }
 
-If not using composer, you can use the *restserver.phar*: just download and require it in your application.
+If not using composer, you can use the _restserver.phar_: just download and require it in your application.
 
 ### The Server
 
