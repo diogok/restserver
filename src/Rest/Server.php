@@ -27,7 +27,7 @@ include_once 'View/Generic.php';
 include_once 'View/JSon.php';
 
 /**
-* Class RestServer 
+* Class Rest\Server 
 * Is the front controller for mapping URL to controllers and dealing with Request/Response and Headers
 * Made with Restful webservices in mind.
 * By Diogo Souza da Silva <manifesto@manifesto.blog.br>
@@ -50,10 +50,10 @@ class Server {
     private $acceptMimes ;
 
     /**
-     * Contructor of RestServer
+     * Contructor of Rest\Server
      * @param string $query Optional query to be treat as the URL
-     * @return RestServer $rest;
-    */
+     * @return Rest\Server $rest;
+     */
     public function __construct($query=null) {
         $this->request = new Request($this); // Request handler
         $this->response = new Response($this); // Response holder
@@ -74,20 +74,20 @@ class Server {
         $this->params = array();
     }
 
-    /**
+   /**
     * Sets a parameter in a global scope that can be recovered at any request.
     * @param mixed $key The identifier of the parameter
     * @param mixed $value The content of the parameter
-    * @return RestServer $this
+    * @return Rest\Server $this
     */
     public function setParameter($key,$value) {
         $this->params[$key] = $value ;
         return $this ;
     }
 
-    /**
-    * Return all parameter
-    * @return array
+   /**
+    * Return all parameters
+    * @return mixed
     */
     public function getParameters() {
         return $this->params;
@@ -102,12 +102,13 @@ class Server {
         return $this->params[$key];
     }
 
-    /** 
+   /** 
     * Maps a Method and URL for a Class
     * @param string $method The method to be associated
     * @param string $uri The URL to be accossiated
     * @param string $class The name of the class to be called, it must implement RestAction
-    * @return RestServer $this
+    * @param array $mimes Accepted mime types. Optional. Overrides global.
+    * @return Rest\Server
     */
     public function addMap($method,$uri,$class,$accept=null) {
         if(isset($this->accept)) $olAccept = $this->accept ;
@@ -134,6 +135,9 @@ class Server {
     }
 
     /**
+     * Set Accepted mime types globally
+     * @param array $mimes
+     * @return Rest\Server
      */
     public function setAccept($mimes) {
         $this->accept = array();
@@ -156,18 +160,17 @@ class Server {
         return $this;
     }
 
-    /**
+   /**
     * Set the URL to be handle or part of it
-    * @param mixed $value The url
-    * @param int $k the part of the url to change
-    * @return RestServer $this
+    * @param string $value The url
+    * @return Rest\Server $this
     */
     public function setQuery($value) {
         $this->getRequest()->setURI($value);
         return $this ;
     }
 
-    /**
+   /**
     * Get the URL or part of it, depreciated by RestRequest::getURI();
     * @param $k uri part
     * @return string
@@ -176,7 +179,7 @@ class Server {
         return $this->getRequest()->getURI($k);
     }  
 
-    /**
+   /**
     * Get the baseurl, based on website location (eg. localhost/website or website.com/);
     * @return string
     **/
@@ -184,9 +187,9 @@ class Server {
         return $this->baseUrl ;
     }
 
-    /**
+   /**
     * Get the Response handler object
-    * @return RestResponse
+    * @return Rest\Response
     */
     public function getResponse() {
         return $this->response ;
@@ -194,24 +197,25 @@ class Server {
 
     /**
      * Get the Request handler object
-    * @return RestRequest
+    * @return Rest\Request
     */
     public function getRequest() {
         return $this->request ;
     }
 
-    /**
-     * Get the Authentication handler object
-    * @return RestAuthenticator
+   /**
+    * Get the Authentication handler object
+    * @return Rest\Authenticator
     */
     public function getAuthenticator() {
         return $this->authenticator ;
     }
 
-    /**
+   /**
     * Get the class for specified method and uri
     * @param string $method
     * @param string $uri
+    * @param string $extesion optional
     * @return string
     */
     public function getMap($method,$uri,$ext=false) {
@@ -252,17 +256,27 @@ class Server {
         return "\\Rest\\Controller\\NotFound";
     }
 
+    /**
+     * Set matched map for request
+     * @param array $uri exploded
+     * @return Rest\Server
+     */
     public function setMatch($map) {
             $this->matched = $map;
             return $this;
     }
+
+    /**
+     * Return matched exploded uri for request
+     * @return string
+     */
 
     public function getMatch() {
             return $this->matched;
     }
 
    /**
-    * Return last class name from RestServer stack trace
+    * Return last class name from Rest\Server stack trace
     * @return string 
     */
     public function lastClass() {
@@ -272,7 +286,7 @@ class Server {
 
    /**
     * Run the Server to handle the request and prepare the response
-    * @return string $responseContent
+    * @return Rest\Server 
     */
     public function execute($echo=true) {
         if(!$this->getAuthenticator()->tryAuthenticate()) {
@@ -325,4 +339,5 @@ class Server {
     }
 
 }
+
 

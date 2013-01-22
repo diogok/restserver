@@ -3,7 +3,7 @@
 // First we include the restserver lib
 //include '../restserver.phar';
 include '../src/Rest/Server.php';
-
+include 'Items.php';
 
 // Them we instantiate the server
 // Using the rewrite rule on .htaccess file the request url is passed into $_GET['q']
@@ -11,12 +11,11 @@ include '../src/Rest/Server.php';
 // If app is running on root and .htacces working, them restserver can guess the url
 $server = new Rest\Server($_GET["q"]);
 
-
 // The server handles proper mime-types, * is for no extension
 $server->setAccept(array("*","application/json"));
 
 // Using the "setParameter" we can have some globaly available vars
-// This vars will be accessible to all requests handlers
+// This var will be accessible to all requests handlers
 // Here I define a salt for the user authentication
 $server->setParameter("salt","&dcalsd-09o");
 
@@ -99,11 +98,8 @@ $server->addMap("POST","/users",function($server) {
     return new \Rest\Controller\Created;
 });
 
-
-//
 // The follow mapping are pretty much the same logic, but with different handlers
 // I will comment now only on important diferences
-//
 
 // So here is a feature, you can map parts of the url to named parameters
 // In this case the sencond part of the url will be on the login parameter
@@ -165,20 +161,14 @@ $server->addMap("DELETE","/users/:login",function($server) {
     return new \Rest\View\JSon($user);
 });
 
-$server->addMap("GET","/:login/items",function($server) {
-});
 
-$server->addMap("POST","/:login/items",function($server) {
-});
-
-$server->addMap("PUT","/:login/items/:key",function($server) {
-});
-
-$server->addMap("GET","/:login/items/:key",function($server) {
-});
-
-$server->addMap("DELETE","/:login/items/:key",function($server) {
-});
+// Here you can see how to use a controller for dealing with requests
+// Useful for MVC and more organized apps
+$server->addMap("GET","/:login/items","Items::execute");
+$server->addMap("POST","/:login/items","Items::create");
+$server->addMap("PUT","/:login/items/:key","Items::update");
+$server->addMap("GET","/:login/items/:key","Items::get");
+$server->addMap("DELETE","/:login/items/:key","Items::delete");
 
 // This is your last call, it will chain the hole process and display the results :)
 $server->execute();

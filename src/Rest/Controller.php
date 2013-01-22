@@ -2,10 +2,11 @@
 namespace Rest;
 
  /** 
-  * Class Rest_Controller
+  * interface Rest\Controller
   * Describe a possible Controller to handle a Request
   */
 interface Controller extends Action {
+
      /**
        * Execute the Default action of this controller
        * @param Rest\Server $restServer
