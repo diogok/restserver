@@ -20,6 +20,8 @@ The simplest way is using _composer_, just declare the restserver dependency in 
 
 If not using composer, you can use the _restserver.phar_: just download and require it in your application.
 
+Checkout the [api documentation](http://diogok.github.io/restserver).
+
 ### The Server
 
 The first step to defining you REST service is to instantiate the server, as follows:
